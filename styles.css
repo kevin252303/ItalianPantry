@@ -42,17 +42,28 @@ body {
     align-items: center;
 }
 
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-logo {
+    height: 45px;
+    width: auto;
+}
+
 .logo h1 {
     font-family: 'Playfair Display', serif;
     color: #fff;
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: 700;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0;
 }
 
 .logo .tagline {
     color: #d4af37;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-style: italic;
 }
 
@@ -103,33 +114,73 @@ body {
     transition: 0.3s;
 }
 
+.hamburger.active span:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    padding: 120px 0 80px;
+    position: relative;
+    height: 100vh;
     display: flex;
     align-items: center;
-    min-height: 100vh;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.hero-slideshow {
+    position: absolute;
+    top: 0;
+    left: 46px;
+    width: 93%;
+    height: 100%;
+    display: flex;
+}
+
+.slide {
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
 }
 
 .hero-content {
-    flex: 1;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 700px;
     padding: 0 20px;
-    max-width: 600px;
-    margin: 0 auto;
 }
 
 .hero-content h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 3.5rem;
-    color: #2c5530;
+    font-size: 4rem;
+    color: #fff;
     margin-bottom: 1.5rem;
     line-height: 1.2;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
 }
 
 .hero-content p {
-    font-size: 1.2rem;
-    color: #666;
+    font-size: 1.3rem;
+    color: rgba(255,255,255,0.9);
     margin-bottom: 2rem;
     line-height: 1.8;
 }
@@ -152,28 +203,18 @@ body {
     box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
 }
 
-.hero-image {
-    flex: 1;
-    text-align: center;
-    padding: 0 20px;
-}
-
-.hero-image img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    transition: transform 0.3s ease;
-}
-
-.hero-image img:hover {
-    transform: scale(1.05);
-}
-
 /* About Section */
 .about {
     padding: 100px 0;
     background: #fff;
+}
+
+.about h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: #2c5530;
+    text-align: center;
+    margin-bottom: 3rem;
 }
 
 .about-content {
@@ -183,13 +224,6 @@ body {
     align-items: center;
 }
 
-.about-text h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    color: #2c5530;
-    margin-bottom: 2rem;
-}
-
 .about-text p {
     font-size: 1.1rem;
     color: #666;
@@ -197,20 +231,38 @@ body {
     line-height: 1.8;
 }
 
-.about-image img {
+.about-images {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1rem;
+}
+
+.about-img-main {
+    grid-column: 1 / -1;
     width: 100%;
-    height: auto;
+    height: 300px;
+    object-fit: cover;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-/* Products Section */
-.products {
+.about-img-1,
+.about-img-2 {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* Food Section */
+.food {
     padding: 100px 0;
     background: linear-gradient(135deg, #f8f9fa, #e9ecef);
 }
 
-.products h2 {
+.food h2 {
     font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
     color: #2c5530;
@@ -218,196 +270,144 @@ body {
     margin-bottom: 3rem;
 }
 
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-}
-
-.product-card {
-    background: #fff;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.product-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-}
-
-.product-card img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.product-card:hover img {
-    transform: scale(1.1);
-}
-
-.product-card h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    color: #2c5530;
-    padding: 1rem 1.5rem 0.5rem;
-}
-
-.product-card p {
-    color: #666;
-    padding: 0 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.product-card .price {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #d4af37;
-    padding: 0 1.5rem 1.5rem;
-    display: block;
-}
-
-/* Recipes Section */
-.recipes {
-    padding: 100px 0;
-    background: #fff;
-}
-
-.recipes h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    color: #2c5530;
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-.recipes-grid {
+.food-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
 }
 
-.recipe-card {
+.food-card {
     background: #fff;
     border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    padding: 15px;
+}
+
+.food-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+.food-card img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    border-radius: 15px;
+}
+
+.food-card:hover img {
+    transform: scale(1.08);
+}
+
+.food-card-content {
+    padding: 1.5rem;
+}
+
+.food-card-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: #2c5530;
+    margin-bottom: 0.75rem;
+}
+
+.food-card-content p {
+    color: #666;
+    line-height: 1.6;
+}
+
+.food-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.food-category {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: rgba(44, 85, 48, 0.1);
+    color: #2c5530;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+}
+
+.food-prep-time {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: #8b0000;
+    font-weight: 600;
+}
+
+.food-prep-time i {
+    margin-right: 4px;
+}
+
+/* Partners Section */
+.partners {
+    padding: 100px 0;
+    background: #fff;
+}
+
+.partners h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: #2c5530;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.partners-intro {
+    text-align: center;
+    color: #666;
+    font-size: 1.15rem;
+    margin-bottom: 3rem;
+}
+
+.partners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.partner-card {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 15px;
+    overflow: hidden;
+    text-align: center;
+    padding-bottom: 1.5rem;
     transition: all 0.3s ease;
 }
 
-.recipe-card:hover {
+.partner-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.12);
 }
 
-.recipe-card img {
+.partner-card img {
     width: 100%;
     height: 200px;
     object-fit: cover;
 }
 
-.recipe-content {
-    padding: 1.5rem;
-}
-
-.recipe-content h3 {
+.partner-card h3 {
     font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: #2c5530;
-    margin-bottom: 1rem;
+    margin: 1rem 0 0.5rem;
 }
 
-.recipe-content p {
+.partner-card p {
     color: #666;
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
+    font-size: 0.95rem;
 }
 
-.recipe-link {
-    color: #d4af37;
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
-}
-
-.recipe-link:hover {
-    color: #b8941f;
-}
-
-/* Contact Section */
-.contact {
-    padding: 100px 0;
-    background: linear-gradient(135deg, #2c5530, #4a7c59);
-    color: #fff;
-}
-
-.contact h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-.contact-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-}
-
-.contact-info h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: #d4af37;
-}
-
-.contact-info p {
-    margin-bottom: 2rem;
-    line-height: 1.8;
-}
-
-.contact-form form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.contact-form input,
-.contact-form textarea {
-    padding: 15px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    backdrop-filter: blur(10px);
-}
-
-.contact-form input::placeholder,
-.contact-form textarea::placeholder {
-    color: rgba(255,255,255,0.7);
-}
-
-.contact-form button {
-    background: linear-gradient(135deg, #d4af37, #b8941f);
-    color: #fff;
-    padding: 15px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.contact-form button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
-}
-
+/* Reviews Section */
 /* Footer */
 .footer {
     background: #1a1a1a;
@@ -479,75 +479,162 @@ body {
     .hamburger {
         display: flex;
     }
-    
+
     .nav-menu {
         position: fixed;
         left: -100%;
         top: 70px;
         flex-direction: column;
-        background-color: #ddd4c9;
+        background-color: #2c5530;
         width: 100%;
         text-align: center;
         transition: 0.3s;
         box-shadow: 0 10px 27px rgba(0,0,0,0.05);
         padding: 2rem 0;
     }
-    
+
     .nav-menu.active {
         left: 0;
     }
-    
-    .hero {
-        flex-direction: column;
-        text-align: center;
-        padding: 100px 0 60px;
-    }
-    
-    .hero-content {
-        margin-bottom: 3rem;
-    }
-    
+
     .hero-content h2 {
-        font-size: 2.5rem;
+        font-size: 2.4rem;
     }
-    
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+
+    .hero-slideshow {
+        flex-direction: column;
+    }
+
+    .slide {
+        background-position: center;
+    }
+
+    .about {
+        padding: 60px 0;
+    }
+
     .about-content {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
-    
-    .contact-content {
-        grid-template-columns: 1fr;
-        gap: 2rem;
+
+    .about-images {
+        order: -1;
     }
-    
-    .products-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+    .about-img-main {
+        height: 220px;
     }
-    
-    .recipes-grid {
+
+    .about-img-1,
+    .about-img-2 {
+        height: 150px;
+    }
+
+    .food {
+        padding: 60px 0;
+    }
+
+    .food-grid {
         grid-template-columns: 1fr;
+    }
+
+    .food-card img {
+        height: 220px;
+    }
+
+    .partners {
+        padding: 60px 0;
+    }
+
+    .partners-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .partner-card img {
+        height: 160px;
+    }
+
+    .reviews {
+        min-height: auto;
+        padding: 60px 0;
+    }
+
+    .reviews .container {
+        padding: 0 15px;
+    }
+
+    .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 40px 15px;
+        margin: 30px auto 0;
+    }
+
+    .review-card:nth-child(odd),
+    .review-card:nth-child(even) {
+        grid-column: 1;
+        margin: 0;
+        transform: rotate(1deg);
+    }
+
+    .review-card:nth-child(even) {
+        margin-top: 0;
+    }
+
+    .reviews-footer {
+        margin-top: 30px;
+    }
+
+    .logo-bar {
+        width: 60%;
+        margin-left: 20%;
+        margin-top: 5%;
+        margin-bottom: 4%;
     }
 }
 
 @media (max-width: 480px) {
     .hero-content h2 {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
-    
+
     .hero-content p {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
-    
-    .about-text h2,
-    .products h2,
-    .recipes h2,
-    .contact h2 {
-        font-size: 2rem;
+
+    .about h2,
+    .food h2,
+    .partners h2,
+    .reviews h2 {
+        font-size: 1.8rem;
     }
-    
+
+    .about {
+        padding: 40px 0;
+    }
+
+    .food {
+        padding: 40px 0;
+    }
+
+    .partners {
+        padding: 40px 0;
+    }
+
     .container {
         padding: 0 15px;
+    }
+
+    .logo-bar {
+        width: 70%;
+        margin-left: 15%;
+        margin-top: 4%;
+        margin-bottom: 3%;
     }
 }
 
@@ -570,10 +657,12 @@ html {
 
 .hero-content,
 .about-text,
-.product-card,
-.recipe-card {
+.food-card,
+.partner-card,
+.review-card {
     animation: fadeInUp 0.8s ease-out;
 }
+
 .logo-bar{
     opacity: 1;
     height: 50%;
@@ -582,3 +671,187 @@ html {
     margin-top: 9%;
     margin-bottom: 6%;
 }
+
+/* --- Board Container Effect --- */
+.reviews {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background: #f5f0eb;
+}
+
+.reviews .container {
+    width: 100%;
+    padding: 80px 0;
+}
+
+.reviews h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    text-align: center;
+    color: #2c5530;
+    margin-bottom: 0;
+}
+
+.reviews-loading,
+.reviews-error {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    font-size: 1.1rem;
+    grid-column: 1 / -1;
+}
+
+.reviews-grid {
+    position: relative;
+    display: flex;
+    gap: 60px 40px;
+    margin: 10px auto 0 auto;
+    border-radius: 12px;
+}
+
+.reviews-footer {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.reviews-more-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #d4af37, #b8941f);
+    color: #fff;
+    padding: 14px 40px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.reviews-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+}
+
+/* --- Zigzag / Stagger Layout Placement --- */
+.review-card:nth-child(odd) {
+    grid-column: 1;
+    transform: rotate(-2deg);
+    margin-right: 20px;
+}
+.review-card:nth-child(even) {
+    grid-column: 2;
+    transform: rotate(3deg);
+    margin-left: 20px;
+    margin-top: 80px; /* Forces the vertical staggered shift */
+}
+.review-card:hover {
+    transform: scale(1.03) rotate(0deg) !important;
+    z-index: 10;
+}
+
+/* --- Card Foundations --- */
+.review-card {
+    position: relative;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 7px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05), 0 5px 15px rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-inner {
+    border-radius: 18px;
+    padding: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- The Dynamic Color Themes --- */
+.card-orange .card-inner { background-color: #fff3eb; }
+.card-blue .card-inner   { background-color: #edf0ff; }
+.card-purple .card-inner { background-color: #f9efff; }
+
+/* Dynamic Numbers (Handwritten look) */
+.card-number {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.8rem;
+    font-weight: bold;
+    line-height: 1;
+    margin-bottom: 8px;
+    display: block;
+}
+.card-orange .card-number { color: #ff6b35; }
+.card-blue .card-number   { color: #4361ee; }
+.card-purple .card-number { color: #b5179e; }
+
+/* --- Review Content --- */
+.review-stars {
+    color: #ffb703;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+}
+.review-text {
+    font-size: 0.95rem;
+    color: #4a4a4a;
+    line-height: 1.6;
+    margin: 0 0 20px 0;
+    flex-grow: 1; /* Pushes author profiles evenly to the card bottom */
+}
+
+/* --- Author Details Section --- */
+.review-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-top: 1px dashed rgba(0, 0, 0, 0.08);
+    padding-top: 15px;
+}
+.review-author img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #eee;
+}
+.review-author div {
+    display: flex;
+    flex-direction: column;
+}
+.review-author strong {
+    font-size: 0.9rem;
+    color: #222;
+}
+.review-author span {
+    font-size: 0.75rem;
+    color: #777;
+}
+
+/* --- 3D Glassmorphic Pins --- */
+.pin {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    z-index: 5;
+    box-shadow: inset -3px -3px 8px rgba(0,0,0,0.25), 0 10px 12px rgba(0,0,0,0.18);
+}
+.pin::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 50%;
+    filter: blur(1px);
+}
+.card-orange .pin { background: radial-gradient(circle at 35% 35%, #ff9e79, #e64a19); }
+.card-blue .pin   { background: radial-gradient(circle at 35% 35%, #799eff, #1976d2); }
+.card-purple .pin { background: radial-gradient(circle at 35% 35%, #e079ff, #7b1fa2); }
+

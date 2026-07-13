@@ -12,22 +12,25 @@
 <body>
     <!-- Logo Section -->
     <div>
-        <a href="#home" id="logoLink"><img class="logo-bar" src="images/logo-round-png-01 (2).png" alt="The Italian Pantry Logo" class="logo-image"></a>
+        <a href="#home" id="logoLink"><img class="logo-bar" src="images/logo-round-png-01 (2).png" alt="The Italian Pantry Logo"></a>
     </div>
     <!-- Header -->
     <header class="header" id="dvHeader" style="display: none;">
         <nav class="navbar">
             <div class="nav-container">
                 <div class="logo">
-                    <h1>The Italian Pantry</h1>
-                    <span class="tagline">Authentic Italian Foods</span>
+                    <img class="header-logo" src="images/logo-round-png-01 (2).png" alt="The Italian Pantry Logo">
+                    <div>
+                        <h1>The Italian Pantry</h1>
+                        <span class="tagline">Authentic Italian Foods</span>
+                    </div>
                 </div>
                 <ul class="nav-menu">
                     <li><a href="#home">Home</a></li>
                     <li><a href="#about">About</a></li>
-                    <li><a href="#products">Products</a></li>
-                    <li><a href="#recipes">Recipes</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#food">Food</a></li>
+                    <li><a href="#partners">Partners</a></li>
+                    <li><a href="#reviews">Reviews</a></li>
                 </ul>
                 <div class="hamburger">
                     <span></span>
@@ -40,122 +43,136 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
+        <div class="hero-slideshow">
+            <div class="slide active" style="background-image: url('images/Left-Print.jpg');"></div>
+            <div class="slide" style="background-image: url('images/Right-print.jpg');"></div>            
+        </div>
+        <div class="hero-overlay"></div>
         <div class="hero-content">
             <h2>Benvenuti alla Famiglia</h2>
             <p>Discover the finest authentic Italian ingredients, imported directly from Italy to bring the taste of tradition to your kitchen.</p>
-            <button class="cta-button">Shop Now</button>
-        </div>
-        <div class="hero-image">
-            <img src="images/veggies.jpg" alt="Italian ingredients">
+            <button class="cta-button">Explore Our Food</button>
         </div>
     </section>
 
     <!-- About Section -->
     <section id="about" class="about">
         <div class="container">
+            <h2>Our Story</h2>
             <div class="about-content">
                 <div class="about-text">
-                    <h2>Our Story</h2>
                     <p>For three generations, our family has been passionate about bringing the authentic flavors of Italy to food lovers around the world. From the sun-kissed tomatoes of San Marzano to the finest extra virgin olive oils of Tuscany, we carefully select each product to ensure you experience the true taste of Italy.</p>
                     <p>Our pantry is filled with time-honored ingredients that have been the foundation of Italian cuisine for centuries. Every jar of sauce, bottle of oil, and package of pasta tells a story of tradition, quality, and love for good food.</p>
                 </div>
-                <div class="about-image">
-                    <img src="images/ourstory.jpg" alt="Italian family cooking">
+                <div class="about-images">
+                    <img src="images/ourstory.jpg" alt="Italian family cooking" class="about-img-main">
+                    <img src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Italian cafe interior" class="about-img-1">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Italian dining" class="about-img-2">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Products Section -->
-    <section id="products" class="products">
+    <!-- Food Section -->
+    <section id="food" class="food">
         <div class="container">
-            <h2>Featured Products</h2>
-            <div class="products-grid">
-                <div class="product-card">
-                    <img src="images/olive-oil.jpg" alt="Olive Oil">
-                    <h3>Extra Virgin Olive Oil</h3>
-                    <p>Cold-pressed from the finest Tuscan olives</p>
-                    <span class="price">$24.99</span>
+            <h2>Our Food</h2>
+            <div class="food-grid">
+                <div class="food-card">
+                    <img src="images/olive-oil.jpg" alt="Extra Virgin Olive Oil">
+                    <div class="food-card-content">
+                        <h3>Extra Virgin Olive Oil</h3>
+                        <p>Cold-pressed from the finest Tuscan olives, with a rich, peppery finish.</p>
+                    </div>
                 </div>
-                <div class="product-card">
-                    <img src="https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Pasta">
-                    <h3>Artisan Pasta</h3>
-                    <p>Handmade pasta from durum wheat semolina</p>
-                    <span class="price">$8.99</span>
+                <div class="food-card">
+                    <img src="https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Artisan Pasta">
+                    <div class="food-card-content">
+                        <h3>Artisan Pasta</h3>
+                        <p>Handmade pasta from durum wheat semolina, bronze-drawn for perfect texture.</p>
+                    </div>
                 </div>
-                <div class="product-card">
+                <div class="food-card">
                     <img src="images/plate.jpg" alt="San Marzano Tomatoes">
-                    <h3>San Marzano Tomatoes</h3>
-                    <p>DOP certified tomatoes from Mount Vesuvius</p>
-                    <span class="price">$12.99</span>
-                </div>
-                <div class="product-card">
-                    <img src="images/bread.jpg" alt="Balsamic Vinegar">
-                    <h3>Aged Balsamic Vinegar</h3>
-                    <p>Traditional balsamic from Modena, aged 12 years</p>
-                    <span class="price">$45.99</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Recipes Section -->
-    <section id="recipes" class="recipes">
-        <div class="container">
-            <h2>Traditional Recipes</h2>
-            <div class="recipes-grid">
-                <div class="recipe-card">
-                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Margherita Pizza">
-                    <div class="recipe-content">
-                        <h3>Pizza Margherita</h3>
-                        <p>The classic Neapolitan pizza with our San Marzano tomatoes, fresh mozzarella, and basil.</p>
-                        <a href="#" class="recipe-link">View Recipe</a>
+                    <div class="food-card-content">
+                        <h3>San Marzano Tomatoes</h3>
+                        <p>DOP certified tomatoes from the volcanic soils of Mount Vesuvius.</p>
                     </div>
                 </div>
-                <div class="recipe-card">
-                    <img src="images/Spaghetti.jpg" alt="Pasta Carbonara">
-                    <div class="recipe-content">
-                        <h3>Spaghetti Carbonara</h3>
-                        <p>Authentic Roman carbonara made with our artisan pasta, pancetta, and Pecorino Romano.</p>
-                        <a href="#" class="recipe-link">View Recipe</a>
+                <div class="food-card">
+                    <img src="images/bread.jpg" alt="Aged Balsamic Vinegar">
+                    <div class="food-card-content">
+                        <h3>Aged Balsamic Vinegar</h3>
+                        <p>Traditional balsamic from Modena, aged 12 years in wooden barrels.</p>
                     </div>
                 </div>
-                <div class="recipe-card">
-                    <img src="https://images.unsplash.com/photo-1572441713132-51c75654db73?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Bruschetta">
-                    <div class="recipe-content">
-                        <h3>Bruschetta al Pomodoro</h3>
-                        <p>Fresh tomatoes on toasted bread, drizzled with our finest extra virgin olive oil.</p>
-                        <a href="#" class="recipe-link">View Recipe</a>
+                <div class="food-card">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Fresh Mozzarella">
+                    <div class="food-card-content">
+                        <h3>Fresh Mozzarella</h3>
+                        <p>Buffalo mozzarella sourced from small dairies in Campania.</p>
+                    </div>
+                </div>
+                <div class="food-card">
+                    <img src="https://images.unsplash.com/photo-1476124369491-e7addf5db371?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Italian Wine">
+                    <div class="food-card-content">
+                        <h3>Italian Wine Selection</h3>
+                        <p>Curated wines from Chianti, Barolo, and Montepulciano regions.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
+    <!-- Partners Section -->
+    <section id="partners" class="partners">
         <div class="container">
-            <h2>Get in Touch</h2>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3>Visit Our Store</h3>
-                    <p>123 Little Italy Street<br>
-                    New York, NY 10013<br>
-                    Phone: (555) 123-4567<br>
-                    Email: info@italiapantry.com</p>
-                    
-                    <h3>Store Hours</h3>
-                    <p>Monday - Saturday: 9:00 AM - 8:00 PM<br>
-                    Sunday: 10:00 AM - 6:00 PM</p>
+            <h2>Our Dining Partners</h2>
+            <p class="partners-intro">We are proud to serve the finest restaurants and cafes in the region.</p>
+            <div class="partners-grid">
+                <div class="partner-card">
+                    <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Ristorante Bellavista">
+                    <h3>Ristorante Bellavista</h3>
+                    <p>Downtown · Italian Fine Dining</p>
                 </div>
-                <div class="contact-form">
-                    <form>
-                        <input type="text" placeholder="Your Name" required>
-                        <input type="email" placeholder="Your Email" required>
-                        <textarea placeholder="Your Message" rows="5" required></textarea>
-                        <button type="submit">Send Message</button>
-                    </form>
+                <div class="partner-card">
+                    <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Cafe Roma">
+                    <h3>Cafe Roma</h3>
+                    <p>East Side · Coffee & Pastries</p>
                 </div>
+                <div class="partner-card">
+                    <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Trattoria Firenze">
+                    <h3>Trattoria Firenze</h3>
+                    <p>West End · Family-Style Italian</p>
+                </div>
+                <div class="partner-card">
+                    <img src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Pizza Napoletana">
+                    <h3>Pizza Napoletana</h3>
+                    <p>Midtown · Authentic Neapolitan Pizza</p>
+                </div>
+                <div class="partner-card">
+                    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Osteria Venezia">
+                    <h3>Osteria Venezia</h3>
+                    <p>Harbor District · Seafood & Wine</p>
+                </div>
+                <div class="partner-card">
+                    <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb51f3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Gelateria Amore">
+                    <h3>Gelateria Amore</h3>
+                    <p>South Park · Artisan Gelato</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="reviews">
+        <div class="container">
+            <h2>What city Say about us </h2>
+            <div class="reviews-grid" id="reviewsContainer">
+                <div class="reviews-loading">Loading reviews...</div>
+            </div>
+            <div class="reviews-footer">
+                <a href="https://www.google.com/search?sca_esv=1aa2181320e8cba3&sxsrf=ANbL-n6O9xd0wrwde5k8Vc5V10_5Zk5Ljw:1781373694204&si=AL3DRZEsmMGCryMMFSHJ3StBhOdZ2-6yYkXd_doETEE1OR-qOWW7Jan7UtVdwbzfbEWFW6l9wLrC17M89AlI3gBLKH_H4o-AZgJziBsKcJ-jrPKP_vuXb7kyFfoOJhs5rnJbgNXtuHfebMebmQiyjVsewNeb-BFfQw%3D%3D&q=The+Italian+Pantry+Reviews&sa=X&ved=2ahUKEwjF_ISS5oSVAxWLS2wGHXkRLz4Q0bkNegQIOxAF&biw=1536&bih=730&dpr=1.25" target="_blank" class="reviews-more-btn">Explore More</a>
             </div>
         </div>
     </section>
@@ -173,17 +190,14 @@
                     <ul>
                         <li><a href="#home">Home</a></li>
                         <li><a href="#about">About</a></li>
-                        <li><a href="#products">Products</a></li>
-                        <li><a href="#recipes">Recipes</a></li>
+                        <li><a href="#food">Food</a></li>
+                        <li><a href="#partners">Partners</a></li>
+                        <li><a href="#reviews">Reviews</a></li>
+                        <li><a href="admin.html"><i class="fas fa-cog"></i> Admin Panel</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Follow Us</h4>
-                    <!-- <div class="social-links">
-                        <a href="#">Facebook</a>
-                        <a href="#">Instagram</a>
-                        <a href="#">Twitter</a>
-                    </div> -->
                     <div class="social-links">
                         <a href="https://www.facebook.com" target="_blank"><i class="fab fa-facebook fa-2x"></i></a>
                         <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>
@@ -197,7 +211,7 @@
         </div>
     </footer>
 
+    <script src="reviews-data.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
-

@@ -1,1 +1,429 @@
-<h1>admin</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Italian Pantry - Admin Dashboard</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Admin Styling -->
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <img src="images/logo-round-png-01 (2).png" alt="The Italian Pantry Logo" class="login-logo">
+            <h2>Admin Control Panel</h2>
+            <p>Please enter your administrative passcode to proceed.</p>
+            <form class="login-form" id="passcodeForm">
+                <input type="password" id="passcodeInput" placeholder="••••" required maxlength="12" autocomplete="current-password">
+                <button type="submit" class="btn btn-primary btn-submit">Unlock Dashboard</button>
+            </form>
+            <div class="login-feedback" id="loginFeedback"></div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="images/logo-round-png-01 (2).png" alt="Logo" class="sidebar-logo">
+                <div>
+                    <h1>The Italian Pantry</h1>
+                    <span>Admin Panel</span>
+                </div>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li data-tab="overviewTab" class="active">
+                    <a href="#overview"><i class="fas fa-chart-line"></i> <span>Overview</span></a>
+                </li>
+                <li data-tab="aboutTab">
+                    <a href="#about"><i class="fas fa-edit"></i> <span>Hero & About Us</span></a>
+                </li>
+                <li data-tab="foodTab">
+                    <a href="#food"><i class="fas fa-utensils"></i> <span>Food Products</span></a>
+                </li>
+                <li data-tab="partnersTab">
+                    <a href="#partners"><i class="fas fa-handshake"></i> <span>Dining Partners</span></a>
+                </li>
+                <li data-tab="reviewsTab">
+                    <a href="#reviews"><i class="fas fa-star"></i> <span>Customer Reviews</span></a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-logout" id="btnLogout">
+                    <i class="fas fa-sign-out-alt"></i> <span>Log Out</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content-area">
+            <!-- Header Bar -->
+            <header class="header-bar">
+                <h2>Control Panel</h2>
+                <div class="header-actions">
+                    <a href="index.html" target="_blank" class="btn btn-secondary">
+                        <i class="fas fa-external-link-alt"></i> View Website
+                    </a>
+                </div>
+            </header>
+
+            <!-- TAB 1: OVERVIEW -->
+            <section class="tab-section active" id="overviewTab">
+                <div class="widgets-grid">
+                    <div class="widget-card">
+                        <div class="widget-icon"><i class="fas fa-utensils"></i></div>
+                        <div class="widget-details">
+                            <h4>Food Items</h4>
+                            <p id="statFoodCount">0</p>
+                        </div>
+                    </div>
+                    <div class="widget-card">
+                        <div class="widget-icon"><i class="fas fa-handshake"></i></div>
+                        <div class="widget-details">
+                            <h4>Partners</h4>
+                            <p id="statPartnerCount">0</p>
+                        </div>
+                    </div>
+                    <div class="widget-card">
+                        <div class="widget-icon"><i class="fas fa-star"></i></div>
+                        <div class="widget-details">
+                            <h4>Reviews</h4>
+                            <p id="statReviewCount">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3>Welcome to the Manager</h3>
+                    <p>Use the navigation panel on the left to edit the slide pictures, modify story descriptions, or perform full CRUD operations (add, edit, update, delete) on your food catalog, dining partners, and customer reviews.</p>
+                    <p>Changes are saved instantly in your browser's local cache. If you want to reset everything back to the factory defaults, use the reset button below.</p>
+                    
+                    <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem; margin-top: 1.5rem;">
+                        <button class="btn btn-danger" id="btnResetData">
+                            <i class="fas fa-undo-alt"></i> Reset Website to Default Data
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: HERO & ABOUT US -->
+            <section class="tab-section" id="aboutTab">
+                <div class="info-card">
+                    <h3>Edit Hero & Story Content</h3>
+                    <form id="aboutForm">
+                        <!-- Hero Section Images -->
+                        <h4 style="margin: 1.5rem 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; color: var(--secondary-color);">Hero Section Slides</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="slideImage1">Slide Left Image</label>
+                                <div class="file-upload-wrapper">
+                                    <div class="image-preview-box" id="previewSlide1"><i class="fas fa-image"></i></div>
+                                    <div style="flex-grow: 1;">
+                                        <input type="text" id="slideImage1" class="form-control" placeholder="Image URL (e.g. Unsplash) or Upload File" style="margin-bottom: 0.5rem;">
+                                        <input type="file" id="fileSlide1" class="file-upload-input" accept="image/*">
+                                        <label for="fileSlide1" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="slideImage2">Slide Right Image</label>
+                                <div class="file-upload-wrapper">
+                                    <div class="image-preview-box" id="previewSlide2"><i class="fas fa-image"></i></div>
+                                    <div style="flex-grow: 1;">
+                                        <input type="text" id="slideImage2" class="form-control" placeholder="Image URL (e.g. Unsplash) or Upload File" style="margin-bottom: 0.5rem;">
+                                        <input type="file" id="fileSlide2" class="file-upload-input" accept="image/*">
+                                        <label for="fileSlide2" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Story Paragraphs -->
+                        <h4 style="margin: 1.5rem 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; color: var(--secondary-color);">Our Story Paragraphs</h4>
+                        <div class="form-group">
+                            <label for="aboutP1">First Paragraph</label>
+                            <textarea id="aboutP1" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="aboutP2">Second Paragraph</label>
+                            <textarea id="aboutP2" class="form-control" rows="4" required></textarea>
+                        </div>
+
+                        <!-- Story Images -->
+                        <h4 style="margin: 1.5rem 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; color: var(--secondary-color);">Our Story Images</h4>
+                        <div class="form-group">
+                            <label for="aboutMainImg">Main Culinary Image</label>
+                            <div class="file-upload-wrapper">
+                                <div class="image-preview-box" id="previewAboutMain"><i class="fas fa-image"></i></div>
+                                <div style="flex-grow: 1;">
+                                    <input type="text" id="aboutMainImg" class="form-control" placeholder="Image URL or Upload File" style="margin-bottom: 0.5rem;">
+                                    <input type="file" id="fileAboutMain" class="file-upload-input" accept="image/*">
+                                    <label for="fileAboutMain" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="aboutImg1">Gallery Image 1</label>
+                                <div class="file-upload-wrapper">
+                                    <div class="image-preview-box" id="previewAbout1"><i class="fas fa-image"></i></div>
+                                    <div style="flex-grow: 1;">
+                                        <input type="text" id="aboutImg1" class="form-control" placeholder="Image URL or Upload File" style="margin-bottom: 0.5rem;">
+                                        <input type="file" id="fileAbout1" class="file-upload-input" accept="image/*">
+                                        <label for="fileAbout1" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="aboutImg2">Gallery Image 2</label>
+                                <div class="file-upload-wrapper">
+                                    <div class="image-preview-box" id="previewAbout2"><i class="fas fa-image"></i></div>
+                                    <div style="flex-grow: 1;">
+                                        <input type="text" id="aboutImg2" class="form-control" placeholder="Image URL or Upload File" style="margin-bottom: 0.5rem;">
+                                        <input type="file" id="fileAbout2" class="file-upload-input" accept="image/*">
+                                        <label for="fileAbout2" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem; margin-top: 2rem;">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Hero & About Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- TAB 3: FOOD PRODUCTS CRUD -->
+            <section class="tab-section" id="foodTab">
+                <div class="section-header">
+                    <h3>Food Catalog</h3>
+                    <button class="btn btn-success" id="btnAddFood">
+                        <i class="fas fa-plus"></i> Add New Product
+                    </button>
+                </div>
+
+                <div class="item-list-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">Thumbnail</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Prep Time</th>
+                                <th>Description</th>
+                                <th style="width: 120px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="foodTableBody">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TAB 4: DINING PARTNERS CRUD -->
+            <section class="tab-section" id="partnersTab">
+                <div class="section-header">
+                    <h3>Dining Partners</h3>
+                    <button class="btn btn-success" id="btnAddPartner">
+                        <i class="fas fa-plus"></i> Add Dining Partner
+                    </button>
+                </div>
+
+                <div class="item-list-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">Thumbnail</th>
+                                <th>Restaurant Name</th>
+                                <th>Location & Info</th>
+                                <th style="width: 120px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="partnerTableBody">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TAB 5: CUSTOMER REVIEWS CRUD -->
+            <section class="tab-section" id="reviewsTab">
+                <div class="section-header">
+                    <h3>Customer Reviews</h3>
+                    <button class="btn btn-success" id="btnAddReview">
+                        <i class="fas fa-plus"></i> Add Customer Review
+                    </button>
+                </div>
+
+                <div class="item-list-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">User Photo</th>
+                                <th>Author Name</th>
+                                <th>Rating</th>
+                                <th>Review Snippet</th>
+                                <th style="width: 120px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reviewTableBody">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL 1: FOOD PRODUCT -->
+    <div class="modal-overlay" id="foodModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="foodModalTitle">Add New Food Product</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="foodForm">
+                <div class="modal-body">
+                    <input type="hidden" id="foodItemId">
+                    <div class="form-group">
+                        <label for="foodName">Product Name *</label>
+                        <input type="text" id="foodName" class="form-control" placeholder="e.g. Extra Virgin Olive Oil" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="foodCategory">Type of Food *</label>
+                        <input type="text" id="foodCategory" class="form-control" placeholder="e.g. Oil, Pasta, Cheese, Pantry, Wine" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="foodPrepTime">Preparation Time *</label>
+                        <input type="text" id="foodPrepTime" class="form-control" placeholder="e.g. 20 mins, Ready, 1 hr" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="foodDesc">Description *</label>
+                        <textarea id="foodDesc" class="form-control" rows="3" placeholder="Describe the item (origin, flavor, preparation)" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="foodImgUrl">Product Image *</label>
+                        <div class="file-upload-wrapper">
+                            <div class="image-preview-box" id="previewFoodImg"><i class="fas fa-image"></i></div>
+                            <div style="flex-grow: 1;">
+                                <input type="text" id="foodImgUrl" class="form-control" placeholder="Image URL (e.g. Unsplash) or Upload below" style="margin-bottom: 0.5rem;">
+                                <input type="file" id="fileFoodImg" class="file-upload-input" accept="image/*">
+                                <label for="fileFoodImg" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image File</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: DINING PARTNER -->
+    <div class="modal-overlay" id="partnerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="partnerModalTitle">Add Dining Partner</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="partnerForm">
+                <div class="modal-body">
+                    <input type="hidden" id="partnerItemId">
+                    <div class="form-group">
+                        <label for="partnerName">Restaurant / Cafe Name *</label>
+                        <input type="text" id="partnerName" class="form-control" placeholder="e.g. Ristorante Bellavista" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="partnerInfo">Location & Info *</label>
+                        <input type="text" id="partnerInfo" class="form-control" placeholder="e.g. Downtown · Italian Fine Dining" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="partnerImgUrl">Partner Image *</label>
+                        <div class="file-upload-wrapper">
+                            <div class="image-preview-box" id="previewPartnerImg"><i class="fas fa-image"></i></div>
+                            <div style="flex-grow: 1;">
+                                <input type="text" id="partnerImgUrl" class="form-control" placeholder="Image URL or Upload below" style="margin-bottom: 0.5rem;">
+                                <input type="file" id="filePartnerImg" class="file-upload-input" accept="image/*">
+                                <label for="filePartnerImg" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image File</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Partner</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: CUSTOMER REVIEW -->
+    <div class="modal-overlay" id="reviewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="reviewModalTitle">Add Customer Review</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="reviewForm">
+                <div class="modal-body">
+                    <input type="hidden" id="reviewItemId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="reviewAuthor">Author Name *</label>
+                            <input type="text" id="reviewAuthor" class="form-control" placeholder="e.g. Sarah M." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reviewRating">Rating *</label>
+                            <select id="reviewRating" class="form-control" required style="letter-spacing: 0;">
+                                <option value="5">★★★★★ (5 Stars)</option>
+                                <option value="4">★★★★☆ (4 Stars)</option>
+                                <option value="3">★★★☆☆ (3 Stars)</option>
+                                <option value="2">★★☆☆☆ (2 Stars)</option>
+                                <option value="1">★☆☆☆☆ (1 Star)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewText">Review Comment *</label>
+                        <textarea id="reviewText" class="form-control" rows="3" placeholder="What the client wrote about us..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewImgUrl">Profile Picture (Optional)</label>
+                        <div class="file-upload-wrapper">
+                            <div class="image-preview-box" id="previewReviewImg"><i class="fas fa-image"></i></div>
+                            <div style="flex-grow: 1;">
+                                <input type="text" id="reviewImgUrl" class="form-control" placeholder="Image URL or Upload below" style="margin-bottom: 0.5rem;">
+                                <input type="file" id="fileReviewImg" class="file-upload-input" accept="image/*">
+                                <label for="fileReviewImg" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image File</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Review</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel Logic -->
+    <script src="admin.js"></script>
+</body>
+</html>
