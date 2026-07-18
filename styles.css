@@ -596,6 +596,39 @@ body {
         margin-top: 5%;
         margin-bottom: 4%;
     }
+
+    .hero-slideshow {
+        left: 0 !important;
+        width: 100% !important;
+        flex-direction: column;
+    }
+    .hero-content h2 {
+        font-size: 2.2rem !important;
+    }
+    .about-images {
+        display: flex !important;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .about-img-main, .about-img-1, .about-img-2 {
+        height: auto !important;
+        min-height: 200px;
+    }
+    .reviews-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center;
+        width: 100%;
+    }
+    .review-card {
+        width: 100% !important;
+        max-width: 400px;
+        margin: 0 auto !important;
+        transform: none !important;
+    }
+    .review-card:nth-child(even) {
+        margin-top: 0 !important;
+    }
 }
 
 @media (max-width: 480px) {
