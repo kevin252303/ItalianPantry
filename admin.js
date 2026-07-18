@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
         passcodeForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const val = passcodeInput.value.trim();
-            if (val === 'pantry') {
+            if (val === 'Pantry@2510') {
                 sessionStorage.setItem('pantryAdminAuthenticated', 'true');
                 loginScreen.classList.add('hidden');
                 passcodeInput.value = '';
