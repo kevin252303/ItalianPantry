@@ -855,3 +855,88 @@ html {
 .card-blue .pin   { background: radial-gradient(circle at 35% 35%, #799eff, #1976d2); }
 .card-purple .pin { background: radial-gradient(circle at 35% 35%, #e079ff, #7b1fa2); }
 
+@media (max-width: 768px) {
+    /* 1. Stack the dashboard layout vertically instead of side-by-side */
+    .dashboard-container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    /* 2. Turn the sidebar into a compact top banner or scrolling bar */
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color, #e9ecef);
+    }
+
+    /* Shift sidebar header and navigation menu items down nicely */
+    .sidebar-header {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .sidebar-menu {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 0;
+    }
+
+    .sidebar-menu li {
+        margin: 0;
+    }
+
+    .sidebar-menu a {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+
+    .sidebar-footer {
+        margin-top: 5px;
+        text-align: center;
+    }
+
+    /* 3. Let the main content area expand to fill the device screen width */
+    .content-area {
+        width: 100%;
+        padding: 15px;
+        margin-left: 0; /* Clear any hardcoded desktop margins */
+    }
+
+    .header-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding-bottom: 15px;
+    }
+
+    /* 4. Make desktop data tables readable on tiny phone touchscreens */
+    .item-list-container {
+        width: 100%;
+        overflow-x: auto; /* Adds a clean side-scroll layer so fields don't smash */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .data-table {
+        min-width: 600px; /* Protects cell text boundaries from overlapping */
+    }
+
+    /* 5. Transform multi-item grids into linear single columns */
+    .widgets-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+}
