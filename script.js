@@ -120,17 +120,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var pantryData = getPantryData();
 
-    // Background cloud sync — re-renders if cloud data differs
+    // Background cloud sync — merges cloud text with local images, re-renders if changed
     function syncCloudData() {
         PANTRY_STORAGE.load(DEFAULT_PANTRY_DATA).then(function(cloudData) {
             if (!cloudData) return;
-            try { localStorage.setItem('italianPantryData', JSON.stringify(cloudData)); } catch (e) {}
-            var current = JSON.stringify(pantryData);
-            if (JSON.stringify(cloudData) !== current) {
-                pantryData = cloudData;
-                renderDynamicContent();
-            }
+            // Merge: use cloud text, but keep local base64 images
+            pantryData = mergeWithLocal(cloudData, pantryData);
+            try { localStorage.setItem('italianPantryData', JSON.stringify(pantryData)); } catch (e) {}
+            renderDynamicContent();
         });
+    }
+
+    function mergeWithLocal(cloud, local) {
+        if (!local) return cloud;
+        var merged = JSON.parse(JSON.stringify(cloud));
+        function fillEmpty(obj, localObj) {
+            if (!obj || !localObj || typeof obj !== 'object' || typeof localObj !== 'object') return;
+            for (var key in obj) {
+                if (typeof obj[key] === 'string' && obj[key] === '' && typeof localObj[key] === 'string' && localObj[key].length > 0) {
+                    obj[key] = localObj[key];
+                } else if (typeof obj[key] === 'object' && typeof localObj[key] === 'object') {
+                    fillEmpty(obj[key], localObj[key]);
+                }
+            }
+        }
+        fillEmpty(merged, local);
+        return merged;
     }
 
     // Dynamic Rendering Functions

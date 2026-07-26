@@ -1,6 +1,10 @@
 // Admin JS - The Italian Pantry Admin Panel
 
 document.addEventListener('DOMContentLoaded', function() {
+    // ====== PASTE YOUR IMGBB API KEY HERE ======
+    var IMGBB_API_KEY = 'a3b1c5d9e6ce2a1e62ab0836e9b4176f'; // Get free key at https://api.imgbb.com/
+    // ============================================
+
     // Default data structure for resetting and initial setup
     const DEFAULT_PANTRY_DATA = {
         heroSlides: [
@@ -199,13 +203,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
         pantryData = local || DEFAULT_PANTRY_DATA;
 
-        // Then try to sync from cloud
+        // Then try to sync from cloud, merge preserving local base64 images
         PANTRY_STORAGE.load(DEFAULT_PANTRY_DATA).then(function(cloudData) {
-            if (cloudData && JSON.stringify(cloudData) !== JSON.stringify(pantryData)) {
-                pantryData = cloudData;
+            if (cloudData) {
+                pantryData = mergeWithLocal(cloudData, pantryData);
                 initDashboard(); // refresh UI with cloud data
             }
         });
+    }
+
+    function mergeWithLocal(cloud, local) {
+        if (!local) return cloud;
+        var merged = JSON.parse(JSON.stringify(cloud));
+        function fillEmpty(obj, localObj) {
+            if (!obj || !localObj || typeof obj !== 'object' || typeof localObj !== 'object') return;
+            for (var key in obj) {
+                if (typeof obj[key] === 'string' && obj[key] === '' && typeof localObj[key] === 'string' && localObj[key].length > 0) {
+                    obj[key] = localObj[key];
+                } else if (typeof obj[key] === 'object' && typeof localObj[key] === 'object') {
+                    fillEmpty(obj[key], localObj[key]);
+                }
+            }
+        }
+        fillEmpty(merged, local);
+        return merged;
     }
 
     function savePantryData() {
@@ -370,7 +391,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Helper to wire up image uploads
+    // Helper to wire up image uploads — uploads to imgbb.com for cross-device sync
     function setupImageUpload(fileInputId, textInputId, previewId) {
         var fileInput = document.getElementById(fileInputId);
         var textInput = document.getElementById(textInputId);
@@ -381,17 +402,45 @@ document.addEventListener('DOMContentLoaded', function() {
             var file = this.files[0];
             if (!file) return;
 
-            compressImage(file).then(function(base64String) {
-                textInput.value = base64String;
-                updateImagePreview(previewId, base64String);
-            }).catch(function() {
-                // Fallback to uncompressed if compression fails
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    textInput.value = e.target.result;
-                    updateImagePreview(previewId, e.target.result);
-                };
-                reader.readAsDataURL(file);
+            // Compress first, then upload to imgbb
+            compressImage(file).then(function(base64Data) {
+                // Strip the data:image/...;base64, prefix — imgbb wants raw base64
+                var rawBase64 = base64Data.split(',')[1] || base64Data;
+
+                // Upload to imgbb
+                var uploadLabel = document.querySelector('label[for="' + fileInputId + '"]');
+                var origText = uploadLabel ? uploadLabel.innerHTML : '';
+                if (uploadLabel) uploadLabel.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+
+                fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_API_KEY, {
+                    method: 'POST',
+                    body: (function() {
+                        var fd = new FormData();
+                        fd.append('image', rawBase64);
+                        fd.append('name', file.name.replace(/\.[^.]+$/, ''));
+                        return fd;
+                    })()
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(json) {
+                    if (json.data && json.data.url) {
+                        textInput.value = json.data.url;
+                        updateImagePreview(previewId, json.data.url);
+                        showToast('Image uploaded successfully!', 'success');
+                    } else {
+                        throw new Error(json.error ? json.error.message : 'Upload failed');
+                    }
+                })
+                .catch(function(err) {
+                    console.warn('[IMGBB] Upload failed, saving locally:', err);
+                    // Fallback: save as base64 locally
+                    textInput.value = base64Data;
+                    updateImagePreview(previewId, base64Data);
+                    showToast('Upload failed — image saved locally (won\'t sync).', 'error');
+                })
+                .finally(function() {
+                    if (uploadLabel) uploadLabel.innerHTML = origText;
+                });
             });
         });
 

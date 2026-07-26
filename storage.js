@@ -29,6 +29,26 @@ var PANTRY_STORAGE = (function() {
         return API_KEY.length > 10;
     }
 
+    // Strip base64 data URLs from data before cloud sync (too large for JSONBin)
+    // Only syncs text fields and http/https URLs
+    function cleanForCloud(data) {
+        var clean = JSON.parse(JSON.stringify(data));
+        function cleanValue(obj) {
+            if (!obj || typeof obj !== 'object') return;
+            for (var key in obj) {
+                if (typeof obj[key] === 'string' && obj[key].length > 500) {
+                    if (obj[key].indexOf('data:') === 0) {
+                        obj[key] = ''; // replace with empty, keep structure
+                    }
+                } else if (typeof obj[key] === 'object') {
+                    cleanValue(obj[key]);
+                }
+            }
+        }
+        cleanValue(clean);
+        return clean;
+    }
+
     // Create a new bin and store its ID
     function createBin(data) {
         if (!isConfigured()) return Promise.reject('No API key');
@@ -36,7 +56,7 @@ var PANTRY_STORAGE = (function() {
         return fetch(API_BASE + '/bins', {
             method: 'POST',
             headers: getHeaders(),
-            body: JSON.stringify(data)
+            body: JSON.stringify(cleanForCloud(data))
         })
         .then(function(res) {
             console.log('[PANTRY] Create bin response:', res.status);
@@ -83,7 +103,7 @@ var PANTRY_STORAGE = (function() {
         return fetch(API_BASE + '/b/' + binId, {
             method: 'PUT',
             headers: getHeaders(),
-            body: JSON.stringify(data)
+            body: JSON.stringify(cleanForCloud(data))
         })
         .then(function(res) {
             if (!res.ok) throw new Error('Save failed');
