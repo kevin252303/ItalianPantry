@@ -32,16 +32,24 @@ var PANTRY_STORAGE = (function() {
     // Create a new bin and store its ID
     function createBin(data) {
         if (!isConfigured()) return Promise.reject('No API key');
+        console.log('[PANTRY] Creating new cloud bin...');
         return fetch(API_BASE + '/bins', {
             method: 'POST',
             headers: getHeaders(),
             body: JSON.stringify(data)
         })
-        .then(function(res) { return res.json(); })
+        .then(function(res) {
+            console.log('[PANTRY] Create bin response:', res.status);
+            if (!res.ok) throw new Error('Create failed: ' + res.status);
+            return res.json();
+        })
         .then(function(json) {
-            var id = json.record ? json.record._id : json.id;
+            console.log('[PANTRY] Create bin result:', json);
+            var id = json.id || (json.record && json.record._id);
+            if (!id) throw new Error('No ID in response');
             localStorage.setItem(BIN_ID_KEY, id);
             BIN_ID = id;
+            console.log('[PANTRY] Bin created! ID:', id);
             return data;
         });
     }
@@ -120,9 +128,13 @@ var PANTRY_STORAGE = (function() {
         save: function(data) {
             saveLocal(data); // always save locally first (fast)
             return saveToCloud(data)
+                .then(function(result) {
+                    console.log('[PANTRY] Cloud save successful');
+                    return result;
+                })
                 .catch(function(e) {
                     // Cloud save failed, but local is saved
-                    console.warn('Cloud save failed:', e.message || e);
+                    console.warn('[PANTRY] Cloud save failed:', e.message || e);
                     return data;
                 });
         },

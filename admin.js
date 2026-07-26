@@ -529,7 +529,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } else {
                 // Create
-                debugger
                 const newId = 'food-' + Date.now();
                 pantryData.food.push({ id: newId, name, category, prepTime, description, image });
                 showToast('Food product added.', 'success');
