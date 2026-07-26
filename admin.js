@@ -190,17 +190,22 @@ document.addEventListener('DOMContentLoaded', function() {
     let pantryData = DEFAULT_PANTRY_DATA;
 
     function loadPantryData() {
-        const stored = localStorage.getItem('italianPantryData');
-        if (!stored) {
-            localStorage.setItem('italianPantryData', JSON.stringify(DEFAULT_PANTRY_DATA));
-            pantryData = DEFAULT_PANTRY_DATA;
-        } else {
-            try {
-                pantryData = JSON.parse(stored);
-            } catch (e) {
-                pantryData = DEFAULT_PANTRY_DATA;
+        // Load from local cache first (fast, synchronous)
+        var local = null;
+        try {
+            var raw = localStorage.getItem('italianPantryData');
+            local = raw ? JSON.parse(raw) : null;
+        } catch (e) { /* ignore */ }
+
+        pantryData = local || DEFAULT_PANTRY_DATA;
+
+        // Then try to sync from cloud
+        PANTRY_STORAGE.load(DEFAULT_PANTRY_DATA).then(function(cloudData) {
+            if (cloudData && JSON.stringify(cloudData) !== JSON.stringify(pantryData)) {
+                pantryData = cloudData;
+                initDashboard(); // refresh UI with cloud data
             }
-        }
+        });
     }
 
     function savePantryData() {
@@ -209,6 +214,8 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (e) {
             showToast('Storage full. Try using smaller images.', 'error');
         }
+        // Push to cloud in background
+        PANTRY_STORAGE.save(pantryData).catch(function() {});
     }
 
     // --- Navigation (Sidebar Tabs) ---
@@ -278,7 +285,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (btnResetData) {
         btnResetData.addEventListener('click', function() {
             if (confirm('Are you sure you want to reset all content and images to their default values? All custom changes will be lost.')) {
-                localStorage.setItem('italianPantryData', JSON.stringify(DEFAULT_PANTRY_DATA));
+                pantryData = JSON.parse(JSON.stringify(DEFAULT_PANTRY_DATA));
+                localStorage.setItem('italianPantryData', JSON.stringify(pantryData));
+                PANTRY_STORAGE.save(pantryData).catch(function() {});
                 showToast('Website content has been reset to defaults.', 'info');
                 setTimeout(() => {
                     window.location.reload();

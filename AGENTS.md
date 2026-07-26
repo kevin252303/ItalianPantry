@@ -7,10 +7,14 @@ A static marketing site for "The Italian Pantry," an authentic Italian foods bra
 ## Repo Structure
 
 ```
-├── index.html          # Main landing page
-├── admin.html          # Admin placeholder
-├── styles.css          # All styles (no CSS preprocessor)
-├── script.js           # All JS (no modules, no bundler)
+├── index.html          # Main landing page (home, about, food, partners, reviews)
+├── admin.html          # Full CRUD admin dashboard (login, tabs, modals)
+├── styles.css          # All site styles (no CSS preprocessor)
+├── script.js           # Frontend JS (hero, reviews, animations, cloud sync)
+├── admin.js            # Admin CRUD logic (image compression, localStorage, cloud sync)
+├── storage.js          # Cloud storage abstraction (JSONBin.io + localStorage fallback)
+├── reviews-data.js     # Static review data (var reviewsData array)
+├── admin.css           # Admin panel dark theme
 ├── images/             # Static image assets
 └── .vscode/            # Local VS Code config (empty)
 ```
@@ -97,7 +101,9 @@ This project has **no build system, no package.json, no tests, and no linter**.
 - Parallax effect commented out (`script.js:167-174`)
 - `script.js:234-241` — `scrollRestoration` / `onbeforeunload` code runs unconditionally and may conflict with the header hide/show logic
 - No accessibility considerations (no `aria-*` attributes, no skip links)
-- `admin.html` is a bare `<h1>admin</h1>` — likely incomplete
+- `DEFAULT_PANTRY_DATA` is duplicated in both `admin.js` and `script.js` — DRY violation
+- Admin passcode bug: login handler checks hardcoded `'Pantry@2510'` instead of calling `getActivePasscode()`
+- Change passcode handler is outside `DOMContentLoaded` wrapper (scope issue)
 
 ### When Adding Features
 
@@ -108,6 +114,8 @@ This project has **no build system, no package.json, no tests, and no linter**.
 - Use `classList.toggle` / `add` / `remove` instead of inline style where possible
 - Wrap new code in the existing `DOMContentLoaded` callback
 - If adding error handling, use `try/catch` with user-facing fallback
+- Data persistence: use `PANTRY_STORAGE` (storage.js) — reads from cloud first, falls back to localStorage
+- Image uploads: admin.js `compressImage()` reduces base64 size ~70% before storing
 
 ## Recommended VS Code Extensions
 

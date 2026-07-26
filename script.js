@@ -108,23 +108,34 @@ document.addEventListener('DOMContentLoaded', function() {
         DEFAULT_PANTRY_DATA.reviews = reviewsData;
     }
 
-    // Load data from localStorage or initialize
+    // Load data from local cache (fast, synchronous)
     function getPantryData() {
-        let stored = localStorage.getItem('italianPantryData');
-        if (!stored) {
-            localStorage.setItem('italianPantryData', JSON.stringify(DEFAULT_PANTRY_DATA));
-            return DEFAULT_PANTRY_DATA;
-        }
+        var local = null;
         try {
-            return JSON.parse(stored);
-        } catch (e) {
-            return DEFAULT_PANTRY_DATA;
-        }
+            var raw = localStorage.getItem('italianPantryData');
+            local = raw ? JSON.parse(raw) : null;
+        } catch (e) { /* ignore */ }
+        return local || DEFAULT_PANTRY_DATA;
+    }
+
+    var pantryData = getPantryData();
+
+    // Background cloud sync — re-renders if cloud data differs
+    function syncCloudData() {
+        PANTRY_STORAGE.load(DEFAULT_PANTRY_DATA).then(function(cloudData) {
+            if (!cloudData) return;
+            try { localStorage.setItem('italianPantryData', JSON.stringify(cloudData)); } catch (e) {}
+            var current = JSON.stringify(pantryData);
+            if (JSON.stringify(cloudData) !== current) {
+                pantryData = cloudData;
+                renderDynamicContent();
+            }
+        });
     }
 
     // Dynamic Rendering Functions
     function renderDynamicContent() {
-        const data = getPantryData();
+        const data = pantryData;
 
         // 1. Render Hero Slides
         const heroContainer = document.querySelector('.hero-slideshow');
@@ -159,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="food-card-content">
                         <div class="food-meta">
                             ${f.category ? `<span class="food-category">${f.category}</span>` : '<span></span>'}
-                            ${f.prepTime ? `<span class="food-prep-time"><i class="fas fa-clock"></i> Prep: ${f.prepTime}</span>` : ''}
+                            ${f.prepTime ? `<span class="food-category"><i class="fas fa-clock"></i> Prep: ${f.prepTime}</span>` : ''}
                         </div>
                         <h3>${f.name}</h3>
                         <p>${f.description}</p>
@@ -206,8 +217,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Render all elements
+    // Render all elements (from local cache)
     renderDynamicContent();
+
+    // Sync from cloud in background, re-render if updated
+    syncCloudData();
 
     // Mobile Menu Toggle
     const hamburger = document.querySelector('.hamburger');
