@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Italian Pantry - Admin Dashboard</title>
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@300;400;600;700&family=Outfit:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Admin Styling -->
     <link rel="stylesheet" href="admin.css">
 </head>
+
 <body>
 
     <!-- Toast Notification Container -->
@@ -23,7 +27,8 @@
             <h2>Admin Control Panel</h2>
             <p>Please enter your administrative passcode to proceed.</p>
             <form class="login-form" id="passcodeForm">
-                <input type="password" id="passcodeInput" placeholder="••••" required maxlength="12" autocomplete="current-password">
+                <input type="password" id="passcodeInput" placeholder="••••" required maxlength="12"
+                    autocomplete="current-password">
                 <button type="submit" class="btn btn-primary btn-submit">Unlock Dashboard</button>
             </form>
             <div class="login-feedback" id="loginFeedback"></div>
@@ -41,7 +46,7 @@
                     <span>Admin Panel</span>
                 </div>
             </div>
-            
+
             <ul class="sidebar-menu">
                 <li data-tab="overviewTab" class="active">
                     <a href="#overview"><i class="fas fa-chart-line"></i> <span>Overview</span></a>
@@ -107,10 +112,22 @@
 
                 <div class="info-card">
                     <h3>Welcome to the Manager</h3>
-                    <p>Use the navigation panel on the left to edit the slide pictures, modify story descriptions, or perform full CRUD operations (add, edit, update, delete) on your food catalog, dining partners, and customer reviews.</p>
-                    <p>Changes are saved instantly in your browser's local cache. If you want to reset everything back to the factory defaults, use the reset button below.</p>
-                    
+                    <p>Use the navigation panel on the left to edit the slide pictures, modify story descriptions, or
+                        perform full CRUD operations (add, edit, update, delete) on your food catalog, dining partners,
+                        and customer reviews.</p>
+                    <p>Changes are saved instantly in your browser's local cache. If you want to reset everything back
+                        to the factory defaults, use the reset button below.</p>
+
                     <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem; margin-top: 1.5rem;">
+                        <!-- 🌟 PASTE THE SECURITY CARD HERE 🌟 -->
+                        <div class="info-card" style="margin-bottom: 1.5rem; box-shadow: none; padding: 0;">
+                            <h3>Security Settings</h3>
+                            <p>Update the administrative passcode used to access this control panel workspace.</p>
+                            <button class="btn btn-secondary" id="btnOpenChangePassword">
+                                <i class="fas fa-key"></i> Change Admin Passcode
+                            </button>
+                        </div>
+
                         <button class="btn btn-danger" id="btnResetData">
                             <i class="fas fa-undo-alt"></i> Reset Website to Default Data
                         </button>
@@ -124,16 +141,21 @@
                     <h3>Edit Hero & Story Content</h3>
                     <form id="aboutForm">
                         <!-- Hero Section Images -->
-                        <h4 style="margin: 1.5rem 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; color: var(--secondary-color);">Hero Section Slides</h4>
+                        <h4
+                            style="margin: 1.5rem 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; color: var(--secondary-color);">
+                            Hero Section Slides</h4>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="slideImage1">Slide Left Image</label>
                                 <div class="file-upload-wrapper">
                                     <div class="image-preview-box" id="previewSlide1"><i class="fas fa-image"></i></div>
                                     <div style="flex-grow: 1;">
-                                        <input type="text" id="slideImage1" class="form-control" placeholder="Image URL (e.g. Unsplash) or Upload File" style="margin-bottom: 0.5rem;">
+                                        <input type="text" id="slideImage1" class="form-control"
+                                            placeholder="Image URL (e.g. Unsplash) or Upload File"
+                                            style="margin-bottom: 0.5rem;">
                                         <input type="file" id="fileSlide1" class="file-upload-input" accept="image/*">
-                                        <label for="fileSlide1" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image</label>
+                                        <label for="fileSlide1" class="file-upload-btn"><i
+                                                class="fas fa-cloud-upload-alt"></i> Choose Image</label>
                                     </div>
                                 </div>
                             </div>
@@ -142,16 +164,21 @@
                                 <div class="file-upload-wrapper">
                                     <div class="image-preview-box" id="previewSlide2"><i class="fas fa-image"></i></div>
                                     <div style="flex-grow: 1;">
-                                        <input type="text" id="slideImage2" class="form-control" placeholder="Image URL (e.g. Unsplash) or Upload File" style="margin-bottom: 0.5rem;">
+                                        <input type="text" id="slideImage2" class="form-control"
+                                            placeholder="Image URL (e.g. Unsplash) or Upload File"
+                                            style="margin-bottom: 0.5rem;">
                                         <input type="file" id="fileSlide2" class="file-upload-input" accept="image/*">
-                                        <label for="fileSlide2" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image</label>
+                                        <label for="fileSlide2" class="file-upload-btn"><i
+                                                class="fas fa-cloud-upload-alt"></i> Choose Image</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Story Paragraphs -->
-                        <h4 style="margin: 1.5rem 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; color: var(--secondary-color);">Our Story Paragraphs</h4>
+                        <h4
+                            style="margin: 1.5rem 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; color: var(--secondary-color);">
+                            Our Story Paragraphs</h4>
                         <div class="form-group">
                             <label for="aboutP1">First Paragraph</label>
                             <textarea id="aboutP1" class="form-control" rows="4" required></textarea>
@@ -162,15 +189,19 @@
                         </div>
 
                         <!-- Story Images -->
-                        <h4 style="margin: 1.5rem 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; color: var(--secondary-color);">Our Story Images</h4>
+                        <h4
+                            style="margin: 1.5rem 0 1rem 0; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; color: var(--secondary-color);">
+                            Our Story Images</h4>
                         <div class="form-group">
                             <label for="aboutMainImg">Main Culinary Image</label>
                             <div class="file-upload-wrapper">
                                 <div class="image-preview-box" id="previewAboutMain"><i class="fas fa-image"></i></div>
                                 <div style="flex-grow: 1;">
-                                    <input type="text" id="aboutMainImg" class="form-control" placeholder="Image URL or Upload File" style="margin-bottom: 0.5rem;">
+                                    <input type="text" id="aboutMainImg" class="form-control"
+                                        placeholder="Image URL or Upload File" style="margin-bottom: 0.5rem;">
                                     <input type="file" id="fileAboutMain" class="file-upload-input" accept="image/*">
-                                    <label for="fileAboutMain" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image</label>
+                                    <label for="fileAboutMain" class="file-upload-btn"><i
+                                            class="fas fa-cloud-upload-alt"></i> Choose Image</label>
                                 </div>
                             </div>
                         </div>
@@ -180,9 +211,11 @@
                                 <div class="file-upload-wrapper">
                                     <div class="image-preview-box" id="previewAbout1"><i class="fas fa-image"></i></div>
                                     <div style="flex-grow: 1;">
-                                        <input type="text" id="aboutImg1" class="form-control" placeholder="Image URL or Upload File" style="margin-bottom: 0.5rem;">
+                                        <input type="text" id="aboutImg1" class="form-control"
+                                            placeholder="Image URL or Upload File" style="margin-bottom: 0.5rem;">
                                         <input type="file" id="fileAbout1" class="file-upload-input" accept="image/*">
-                                        <label for="fileAbout1" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image</label>
+                                        <label for="fileAbout1" class="file-upload-btn"><i
+                                                class="fas fa-cloud-upload-alt"></i> Choose Image</label>
                                     </div>
                                 </div>
                             </div>
@@ -191,16 +224,19 @@
                                 <div class="file-upload-wrapper">
                                     <div class="image-preview-box" id="previewAbout2"><i class="fas fa-image"></i></div>
                                     <div style="flex-grow: 1;">
-                                        <input type="text" id="aboutImg2" class="form-control" placeholder="Image URL or Upload File" style="margin-bottom: 0.5rem;">
+                                        <input type="text" id="aboutImg2" class="form-control"
+                                            placeholder="Image URL or Upload File" style="margin-bottom: 0.5rem;">
                                         <input type="file" id="fileAbout2" class="file-upload-input" accept="image/*">
-                                        <label for="fileAbout2" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image</label>
+                                        <label for="fileAbout2" class="file-upload-btn"><i
+                                                class="fas fa-cloud-upload-alt"></i> Choose Image</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem; margin-top: 2rem;">
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Hero & About Changes</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Hero & About
+                                Changes</button>
                         </div>
                     </form>
                 </div>
@@ -301,28 +337,35 @@
                     <input type="hidden" id="foodItemId">
                     <div class="form-group">
                         <label for="foodName">Product Name *</label>
-                        <input type="text" id="foodName" class="form-control" placeholder="e.g. Extra Virgin Olive Oil" required>
+                        <input type="text" id="foodName" class="form-control" placeholder="e.g. Extra Virgin Olive Oil"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="foodCategory">Type of Food *</label>
-                        <input type="text" id="foodCategory" class="form-control" placeholder="e.g. Oil, Pasta, Cheese, Pantry, Wine" required>
+                        <input type="text" id="foodCategory" class="form-control"
+                            placeholder="e.g. Oil, Pasta, Cheese, Pantry, Wine" required>
                     </div>
                     <div class="form-group">
                         <label for="foodPrepTime">Preparation Time *</label>
-                        <input type="text" id="foodPrepTime" class="form-control" placeholder="e.g. 20 mins, Ready, 1 hr" required>
+                        <input type="text" id="foodPrepTime" class="form-control"
+                            placeholder="e.g. 20 mins, Ready, 1 hr" required>
                     </div>
                     <div class="form-group">
                         <label for="foodDesc">Description *</label>
-                        <textarea id="foodDesc" class="form-control" rows="3" placeholder="Describe the item (origin, flavor, preparation)" required></textarea>
+                        <textarea id="foodDesc" class="form-control" rows="3"
+                            placeholder="Describe the item (origin, flavor, preparation)" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="foodImgUrl">Product Image *</label>
                         <div class="file-upload-wrapper">
                             <div class="image-preview-box" id="previewFoodImg"><i class="fas fa-image"></i></div>
                             <div style="flex-grow: 1;">
-                                <input type="text" id="foodImgUrl" class="form-control" placeholder="Image URL (e.g. Unsplash) or Upload below" style="margin-bottom: 0.5rem;">
+                                <input type="text" id="foodImgUrl" class="form-control"
+                                    placeholder="Image URL (e.g. Unsplash) or Upload below"
+                                    style="margin-bottom: 0.5rem;">
                                 <input type="file" id="fileFoodImg" class="file-upload-input" accept="image/*">
-                                <label for="fileFoodImg" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image File</label>
+                                <label for="fileFoodImg" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i>
+                                    Choose Image File</label>
                             </div>
                         </div>
                     </div>
@@ -347,20 +390,24 @@
                     <input type="hidden" id="partnerItemId">
                     <div class="form-group">
                         <label for="partnerName">Restaurant / Cafe Name *</label>
-                        <input type="text" id="partnerName" class="form-control" placeholder="e.g. Ristorante Bellavista" required>
+                        <input type="text" id="partnerName" class="form-control"
+                            placeholder="e.g. Ristorante Bellavista" required>
                     </div>
                     <div class="form-group">
                         <label for="partnerInfo">Location & Info *</label>
-                        <input type="text" id="partnerInfo" class="form-control" placeholder="e.g. Downtown · Italian Fine Dining" required>
+                        <input type="text" id="partnerInfo" class="form-control"
+                            placeholder="e.g. Downtown · Italian Fine Dining" required>
                     </div>
                     <div class="form-group">
                         <label for="partnerImgUrl">Partner Image *</label>
                         <div class="file-upload-wrapper">
                             <div class="image-preview-box" id="previewPartnerImg"><i class="fas fa-image"></i></div>
                             <div style="flex-grow: 1;">
-                                <input type="text" id="partnerImgUrl" class="form-control" placeholder="Image URL or Upload below" style="margin-bottom: 0.5rem;">
+                                <input type="text" id="partnerImgUrl" class="form-control"
+                                    placeholder="Image URL or Upload below" style="margin-bottom: 0.5rem;">
                                 <input type="file" id="filePartnerImg" class="file-upload-input" accept="image/*">
-                                <label for="filePartnerImg" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image File</label>
+                                <label for="filePartnerImg" class="file-upload-btn"><i
+                                        class="fas fa-cloud-upload-alt"></i> Choose Image File</label>
                             </div>
                         </div>
                     </div>
@@ -386,7 +433,8 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="reviewAuthor">Author Name *</label>
-                            <input type="text" id="reviewAuthor" class="form-control" placeholder="e.g. Sarah M." required>
+                            <input type="text" id="reviewAuthor" class="form-control" placeholder="e.g. Sarah M."
+                                required>
                         </div>
                         <div class="form-group">
                             <label for="reviewRating">Rating *</label>
@@ -401,16 +449,19 @@
                     </div>
                     <div class="form-group">
                         <label for="reviewText">Review Comment *</label>
-                        <textarea id="reviewText" class="form-control" rows="3" placeholder="What the client wrote about us..." required></textarea>
+                        <textarea id="reviewText" class="form-control" rows="3"
+                            placeholder="What the client wrote about us..." required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="reviewImgUrl">Profile Picture (Optional)</label>
                         <div class="file-upload-wrapper">
                             <div class="image-preview-box" id="previewReviewImg"><i class="fas fa-image"></i></div>
                             <div style="flex-grow: 1;">
-                                <input type="text" id="reviewImgUrl" class="form-control" placeholder="Image URL or Upload below" style="margin-bottom: 0.5rem;">
+                                <input type="text" id="reviewImgUrl" class="form-control"
+                                    placeholder="Image URL or Upload below" style="margin-bottom: 0.5rem;">
                                 <input type="file" id="fileReviewImg" class="file-upload-input" accept="image/*">
-                                <label for="fileReviewImg" class="file-upload-btn"><i class="fas fa-cloud-upload-alt"></i> Choose Image File</label>
+                                <label for="fileReviewImg" class="file-upload-btn"><i
+                                        class="fas fa-cloud-upload-alt"></i> Choose Image File</label>
                             </div>
                         </div>
                     </div>
@@ -422,8 +473,38 @@
             </form>
         </div>
     </div>
-
+    <div class="modal-overlay" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Change Admin Passcode</h3>
+                <button class="modal-close" id="btnCloseChangePassword">&times;</button>
+            </div>
+            <form id="changePasswordForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="currentPasscode">Current Passcode *</label>
+                        <input type="password" id="currentPasscode" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPasscode">New Passcode *</label>
+                        <input type="password" id="newPasscode" class="form-control" required maxlength="12">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmNewPasscode">Confirm New Passcode *</label>
+                        <input type="password" id="confirmNewPasscode" class="form-control" required maxlength="12">
+                    </div>
+                    <div class="login-feedback" id="changePasswordFeedback"
+                        style="color: #8b0000; margin-top: 10px; font-weight: 600;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btnCancelChangePassword">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Passcode</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <!-- Admin Panel Logic -->
     <script src="admin.js"></script>
 </body>
+
 </html>

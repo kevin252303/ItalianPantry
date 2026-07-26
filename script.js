@@ -233,10 +233,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const headerEl = document.querySelector('.header');
         if (headerEl) {
             if (window.scrollY > 100) {
-                headerEl.style.background = 'darkred';
+                headerEl.style.background = '#791314';
                 headerEl.style.backdropFilter = 'blur(10px)';
             } else {
-                headerEl.style.background = 'darkred';
+                headerEl.style.background = '#791314';
                 headerEl.style.backdropFilter = 'none';
             }
         }

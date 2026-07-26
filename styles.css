@@ -186,7 +186,7 @@ body {
 }
 
 .cta-button {
-    background: linear-gradient(135deg, #d4af37, #b8941f);
+    background: #791314;
     color: #fff;
     padding: 15px 40px;
     border: none;
@@ -212,7 +212,7 @@ body {
 .about h2 {
     font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
-    color: #2c5530;
+    color: #791314;
     text-align: center;
     margin-bottom: 3rem;
 }
@@ -226,7 +226,7 @@ body {
 
 .about-text p {
     font-size: 1.1rem;
-    color: #666;
+    color: #000;
     margin-bottom: 1.5rem;
     line-height: 1.8;
 }
@@ -265,7 +265,7 @@ body {
 .food h2 {
     font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
-    color: #2c5530;
+    color: #791314;
     text-align: center;
     margin-bottom: 3rem;
 }
@@ -309,7 +309,7 @@ body {
 .food-card-content h3 {
     font-family: 'Playfair Display', serif;
     font-size: 1.4rem;
-    color: #2c5530;
+    color: #791314;
     margin-bottom: 0.75rem;
 }
 
@@ -357,7 +357,7 @@ body {
 .partners h2 {
     font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
-    color: #2c5530;
+    color: #791314;
     text-align: center;
     margin-bottom: 1rem;
 }
@@ -485,7 +485,7 @@ body {
         left: -100%;
         top: 100px;
         flex-direction: column;
-        background-color: #2c5530;
+        background-color: #791314;
         width: 100%;
         text-align: center;
         transition: 0.3s;
@@ -722,7 +722,7 @@ html {
     font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
     text-align: center;
-    color: #2c5530;
+    color: #791314;
     margin-bottom: 0;
 }
 

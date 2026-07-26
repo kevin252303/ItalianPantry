@@ -751,3 +751,91 @@ document.addEventListener('DOMContentLoaded', function() {
         initDashboard();
     }
 });
+
+// Dom Element Selectors
+const cpModal = document.getElementById('changePasswordModal');
+const btnOpenCp = document.getElementById('btnOpenChangePassword');
+const btnCloseCp = document.getElementById('btnCloseChangePassword');
+const btnCancelCp = document.getElementById('btnCancelChangePassword');
+const cpForm = document.getElementById('changePasswordForm');
+const cpFeedback = document.getElementById('changePasswordFeedback');
+
+// Open Modal
+if (btnOpenCp) {
+    btnOpenCp.addEventListener('click', () => {
+        cpFeedback.textContent = '';
+        cpForm.reset();
+        cpModal.classList.add('active'); // Or however your existing dashboard displays modals
+    });
+}
+
+// Close Modal functions
+function closeChangePasswordModal() {
+    cpModal.classList.remove('active');
+}
+if (btnCloseCp) btnCloseCp.addEventListener('click', closeChangePasswordModal);
+if (btnCancelCp) btnCancelCp.addEventListener('click', closeChangePasswordModal);
+
+// Handle Changing the Passcode
+if (cpForm) {
+    cpForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const currentVal = document.getElementById('currentPasscode').value.trim();
+        const newVal = document.getElementById('newPasscode').value.trim();
+        const confirmVal = document.getElementById('confirmNewPasscode').value.trim();
+        
+        // 1. Verify their old password matches what's stored
+        if (currentVal !== getActivePasscode()) {
+            cpFeedback.textContent = 'Current passcode is incorrect.';
+            return;
+        }
+        
+        // 2. Ensure they typed the new password identical both times
+        if (newVal !== confirmVal) {
+            cpFeedback.textContent = 'New passcodes do not match.';
+            return;
+        }
+        
+        // 3. Prevent empty/whitespace string saves
+        if (newVal.length < 4) {
+            cpFeedback.textContent = 'Passcode must be at least 4 characters long.';
+            return;
+        }
+
+        // 4. Save new passcode to localStorage
+        localStorage.setItem('pantryAdminPasscode', newVal);
+        
+        // Success Actions
+        closeChangePasswordModal();
+        if (typeof showToast === 'function') {
+            showToast('Passcode updated successfully!', 'success');
+        } else {
+            alert('Passcode updated successfully!');
+        }
+    });
+}
+
+// Helper to get the active passcode (checks localStorage first, falls back to default)
+function getActivePasscode() {
+    return localStorage.getItem('pantryAdminPasscode') || 'pantry';
+}
+
+// if (passcodeForm) {
+//     passcodeForm.addEventListener('submit', function(e) {
+//         e.preventDefault();
+//         const val = passcodeInput.value.trim();
+        
+//         // 🌟 CHANGED: Validating against dynamic variable instead of hardcoded string
+//         if (val === getActivePasscode()) {
+//             sessionStorage.setItem('pantryAdminAuthenticated', 'true');
+//             loginScreen.classList.add('hidden');
+//             passcodeInput.value = '';
+//             showToast('Welcome, Administrator!', 'success');
+//             initDashboard();
+//         } else {
+//             loginFeedback.textContent = 'Invalid Passcode. Please try again.';
+//             passcodeInput.select();
+//         }
+//     });
+// }
