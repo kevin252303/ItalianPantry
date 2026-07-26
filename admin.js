@@ -204,7 +204,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function savePantryData() {
-        localStorage.setItem('italianPantryData', JSON.stringify(pantryData));
+        try {
+            localStorage.setItem('italianPantryData', JSON.stringify(pantryData));
+        } catch (e) {
+            showToast('Storage full. Try using smaller images.', 'error');
+        }
     }
 
     // --- Navigation (Sidebar Tabs) ---
@@ -328,24 +332,58 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Helper to compress images before storing as base64
+    function compressImage(file, maxWidth, quality) {
+        maxWidth = maxWidth || 800;
+        quality = quality || 0.6;
+        return new Promise(function(resolve, reject) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var img = new Image();
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
+                    var width = img.width;
+                    var height = img.height;
+                    if (width > maxWidth) {
+                        height = (height * maxWidth) / width;
+                        width = maxWidth;
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                    resolve(canvas.toDataURL('image/jpeg', quality));
+                };
+                img.onerror = reject;
+                img.src = e.target.result;
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+
     // Helper to wire up image uploads
     function setupImageUpload(fileInputId, textInputId, previewId) {
-        const fileInput = document.getElementById(fileInputId);
-        const textInput = document.getElementById(textInputId);
+        var fileInput = document.getElementById(fileInputId);
+        var textInput = document.getElementById(textInputId);
         
         if (!fileInput || !textInput) return;
 
         fileInput.addEventListener('change', function() {
-            const file = this.files[0];
+            var file = this.files[0];
             if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const base64String = e.target.result;
+            compressImage(file).then(function(base64String) {
                 textInput.value = base64String;
                 updateImagePreview(previewId, base64String);
-            };
-            reader.readAsDataURL(file);
+            }).catch(function() {
+                // Fallback to uncompressed if compression fails
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    textInput.value = e.target.result;
+                    updateImagePreview(previewId, e.target.result);
+                };
+                reader.readAsDataURL(file);
+            });
         });
 
         // Update preview on manual input text change
@@ -482,6 +520,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } else {
                 // Create
+                debugger
                 const newId = 'food-' + Date.now();
                 pantryData.food.push({ id: newId, name, category, prepTime, description, image });
                 showToast('Food product added.', 'success');
