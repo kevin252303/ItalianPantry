@@ -137,9 +137,11 @@ var PANTRY_STORAGE = (function() {
                     saveLocal(data); // update cache
                     return data;
                 })
-                .catch(function() {
+                .catch(function(err) {
+                    console.error("Cloud error:", err);
                     // Cloud unavailable, use local cache
                     var local = getLocal();
+                    console.log("Local data:", local);
                     return local || defaultData;
                 });
         },
