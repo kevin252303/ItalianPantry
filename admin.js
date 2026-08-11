@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
         PANTRY_STORAGE.load(DEFAULT_PANTRY_DATA).then(function(cloudData) {
             if (cloudData) {
                 pantryData = mergeWithLocal(cloudData, pantryData);
-                initDashboard(); // refresh UI with cloud data
+                //initDashboard(); // refresh UI with cloud data
             }
         });
     }
@@ -236,7 +236,12 @@ document.addEventListener('DOMContentLoaded', function() {
             showToast('Storage full. Try using smaller images.', 'error');
         }
         // Push to cloud in background
-        PANTRY_STORAGE.save(pantryData).catch(function() {});
+        PANTRY_STORAGE.save(pantryData).then(function() {
+            showToast('Saved & synced to cloud.', 'success');
+        }).catch(function(e) {
+            console.warn('[PANTRY] Cloud sync failed:', e);
+            showToast('Saved locally, but cloud sync failed.', 'error');
+        });
     }
 
     // --- Navigation (Sidebar Tabs) ---

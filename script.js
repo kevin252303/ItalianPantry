@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="review-card ${themeColor}">
                         <div class="pin"></div>
                         <div class="card-inner">
-                            <div class="review-stars">${stars}</div>
+                            <div class="review-stars">${stars}</div>    
                             <p class="review-text">"${r.text}"</p>
                             <div class="review-author">
                                 <div>
