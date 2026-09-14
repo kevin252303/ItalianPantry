@@ -4,7 +4,7 @@
 
 var PANTRY_STORAGE = (function() {
     // ====== PASTE YOUR JSONBIN.IO CREDENTIALS HERE ======
-    var API_KEY = '$2a$10$Crsn.5xz.X4d40jWj2gao.kZjkU7aQ.Stwc0tdWNJHTu5UfJ2WMsa';   // e.g. '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+    var API_KEY = '$2a$10$ONEk/D.I96TBZXpRCtk6ze8/DZwOAOfYvXIrYs2Jcv5MPrGV5lNsu';   // e.g. '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
     var BIN_ID = '';    // e.g. 'abc1234567890'
     // ====================================================
 

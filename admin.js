@@ -165,12 +165,12 @@ document.addEventListener('DOMContentLoaded', function() {
         passcodeForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const val = passcodeInput.value.trim();
-            if (val === 'Pantry@2510') {
+            if (val === getActivePasscode()) {
                 sessionStorage.setItem('pantryAdminAuthenticated', 'true');
                 loginScreen.classList.add('hidden');
                 passcodeInput.value = '';
                 showToast('Welcome, Administrator!', 'success');
-                initDashboard();
+                loadPantryData();
             } else {
                 loginFeedback.textContent = 'Invalid Passcode. Please try again.';
                 passcodeInput.select();
@@ -202,14 +202,20 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (e) { /* ignore */ }
 
         pantryData = local || DEFAULT_PANTRY_DATA;
+        renderDashboardUI(); // Render immediately from local data
 
-        // Then try to sync from cloud, merge preserving local base64 images
-        PANTRY_STORAGE.load(DEFAULT_PANTRY_DATA).then(function(cloudData) {
-            if (cloudData) {
-                pantryData = mergeWithLocal(cloudData, pantryData);
-                //initDashboard(); // refresh UI with cloud data
-            }
-        });
+        // Then try to sync from cloud in background, merge preserving local base64 images
+        if (typeof PANTRY_STORAGE !== 'undefined' && PANTRY_STORAGE.isConfigured()) {
+            PANTRY_STORAGE.load(DEFAULT_PANTRY_DATA).then(function(cloudData) {
+                if (cloudData && typeof cloudData === 'object') {
+                    pantryData = mergeWithLocal(cloudData, pantryData);
+                    try {
+                        localStorage.setItem('italianPantryData', JSON.stringify(pantryData));
+                    } catch (e) { /* ignore */ }
+                    renderDashboardUI(); // refresh UI with cloud data
+                }
+            });
+        }
     }
 
     function mergeWithLocal(cloud, local) {
@@ -236,12 +242,16 @@ document.addEventListener('DOMContentLoaded', function() {
             showToast('Storage full. Try using smaller images.', 'error');
         }
         // Push to cloud in background
-        PANTRY_STORAGE.save(pantryData).then(function() {
-            showToast('Saved & synced to cloud.', 'success');
-        }).catch(function(e) {
-            console.warn('[PANTRY] Cloud sync failed:', e);
-            showToast('Saved locally, but cloud sync failed.', 'error');
-        });
+        if (typeof PANTRY_STORAGE !== 'undefined' && PANTRY_STORAGE.isConfigured()) {
+            PANTRY_STORAGE.save(pantryData).then(function() {
+                showToast('Saved & synced to cloud.', 'success');
+            }).catch(function(e) {
+                console.warn('[PANTRY] Cloud sync failed:', e);
+                showToast('Saved locally, but cloud sync failed.', 'error');
+            });
+        } else {
+            showToast('Saved locally.', 'success');
+        }
     }
 
     // --- Navigation (Sidebar Tabs) ---
@@ -266,14 +276,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // --- Dashboard Initializer ---
-    function initDashboard() {
-        loadPantryData();
+    // --- Dashboard Initializer & Renderers ---
+    function renderDashboardUI() {
         updateOverviewStats();
         populateAboutForm();
         renderFoodTable();
         renderPartnersTable();
         renderReviewsTable();
+    }
+
+    function initDashboard() {
+        renderDashboardUI();
     }
 
     // --- Toast Notifications ---
@@ -849,7 +862,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- Initialize Dashboard on successful auth ---
     if (sessionStorage.getItem('pantryAdminAuthenticated') === 'true') {
-        initDashboard();
+        loadPantryData();
     }
 });
 
@@ -919,7 +932,7 @@ if (cpForm) {
 
 // Helper to get the active passcode (checks localStorage first, falls back to default)
 function getActivePasscode() {
-    return localStorage.getItem('pantryAdminPasscode') || 'pantry';
+    return localStorage.getItem('pantryAdminPasscode') || 'Pantry@2510';
 }
 
 // if (passcodeForm) {
