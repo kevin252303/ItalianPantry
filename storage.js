@@ -5,7 +5,7 @@
 var PANTRY_STORAGE = (function() {
     // ====== PASTE YOUR JSONBIN.IO CREDENTIALS HERE ======
     var API_KEY = '$2a$10$ONEk/D.I96TBZXpRCtk6ze8/DZwOAOfYvXIrYs2Jcv5MPrGV5lNsu';   // e.g. '$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-    var BIN_ID = '';    // e.g. 'abc1234567890'
+    var BIN_ID = '6a7b4508da38895dfed664b0';    // Italian Pantry cloud bin
     // ====================================================
 
     var API_BASE = 'https://api.jsonbin.io/v3';
