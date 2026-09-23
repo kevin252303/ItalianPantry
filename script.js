@@ -216,7 +216,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     <h3><a href="${href}" target="_blank" rel="noopener noreferrer" title="Visit ${p.name}">${p.name}</a></h3>
                     <p class="partner-url">
                         <a href="${href}" target="_blank" rel="noopener noreferrer" title="Visit ${p.name}">
-                            <i class="fas fa-external-link-alt"></i> ${url}
                         </a>
                     </p>
                 </div>
