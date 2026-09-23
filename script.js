@@ -66,37 +66,37 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 id: 'partner-1',
                 name: 'Ristorante Bellavista',
-                info: 'Downtown · Italian Fine Dining',
+                url: 'https://www.ristorantebellavista.it',
                 image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
             },
             {
                 id: 'partner-2',
                 name: 'Cafe Roma',
-                info: 'East Side · Coffee & Pastries',
+                url: 'https://www.caferoma.it',
                 image: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
             },
             {
                 id: 'partner-3',
                 name: 'Trattoria Firenze',
-                info: 'West End · Family-Style Italian',
+                url: 'https://www.trattoriafirenze.it',
                 image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
             },
             {
                 id: 'partner-4',
                 name: 'Pizza Napoletana',
-                info: 'Midtown · Authentic Neapolitan Pizza',
+                url: 'https://www.pizzanapoletana.it',
                 image: 'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
             },
             {
                 id: 'partner-5',
                 name: 'Osteria Venezia',
-                info: 'Harbor District · Seafood & Wine',
+                url: 'https://www.osteriavenezia.it',
                 image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
             },
             {
                 id: 'partner-6',
                 name: 'Gelateria Amore',
-                info: 'South Park · Artisan Gelato',
+                url: 'https://www.gelateriaamore.it',
                 image: 'https://images.unsplash.com/photo-1550966871-3ed3cdb51f3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
             }
         ],
@@ -197,13 +197,55 @@ document.addEventListener('DOMContentLoaded', function() {
         // 4. Render Dining Partners Section
         const partnersContainer = document.querySelector('.partners-grid');
         if (partnersContainer && data.partners) {
-            partnersContainer.innerHTML = data.partners.map(p => `
+            partnersContainer.innerHTML = data.partners.map(p => {
+                let url = p.url;
+                if (!url) {
+                    if (p.info && (p.info.startsWith('http://') || p.info.startsWith('https://') || p.info.startsWith('www.'))) {
+                        url = p.info;
+                    } else {
+                        const slug = p.name ? p.name.toLowerCase().replace(/[^a-z0-9]/g, '') : 'partner';
+                        url = 'https://www.' + slug + '.com';
+                    }
+                }
+                const href = url.startsWith('http://') || url.startsWith('https://') ? url : 'https://' + url;
+                return `
                 <div class="partner-card">
-                    <img src="${p.image}" alt="${p.name}">
-                    <h3>${p.name}</h3>
-                    <p>${p.info}</p>
+                    <a href="${href}" target="_blank" rel="noopener noreferrer" class="partner-img-link" title="Visit ${p.name}">
+                        <img src="${p.image}" alt="${p.name}">
+                    </a>
+                    <h3><a href="${href}" target="_blank" rel="noopener noreferrer" title="Visit ${p.name}">${p.name}</a></h3>
+                    <p class="partner-url">
+                        <a href="${href}" target="_blank" rel="noopener noreferrer" title="Visit ${p.name}">
+                            <i class="fas fa-external-link-alt"></i> ${url}
+                        </a>
+                    </p>
                 </div>
-            `).join('');
+            `;
+            }).join('');
+        }
+
+        // Render Dining Partners in Footer
+        const footerPartnersContainer = document.getElementById('footerPartnersList');
+        if (footerPartnersContainer && data.partners) {
+            footerPartnersContainer.innerHTML = data.partners.map(p => {
+                let url = p.url;
+                if (!url) {
+                    if (p.info && (p.info.startsWith('http://') || p.info.startsWith('https://') || p.info.startsWith('www.'))) {
+                        url = p.info;
+                    } else {
+                        const slug = p.name ? p.name.toLowerCase().replace(/[^a-z0-9]/g, '') : 'partner';
+                        url = 'https://www.' + slug + '.com';
+                    }
+                }
+                const href = url.startsWith('http://') || url.startsWith('https://') ? url : 'https://' + url;
+                return `
+                    <li>
+                        <a href="${href}" target="_blank" rel="noopener noreferrer" title="Visit ${p.name}">
+                            ${p.name}
+                        </a>
+                    </li>
+                `;
+            }).join('');
         }
 
         // 5. Render Reviews Section

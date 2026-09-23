@@ -72,37 +72,43 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 id: 'partner-1',
                 name: 'Ristorante Bellavista',
-                info: 'Downtown · Italian Fine Dining',
+                url: 'https://www.ristorantebellavista.it',
+                info: 'https://www.ristorantebellavista.it',
                 image: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
             },
             {
                 id: 'partner-2',
                 name: 'Cafe Roma',
-                info: 'East Side · Coffee & Pastries',
+                url: 'https://www.caferoma.it',
+                info: 'https://www.caferoma.it',
                 image: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
             },
             {
                 id: 'partner-3',
                 name: 'Trattoria Firenze',
-                info: 'West End · Family-Style Italian',
+                url: 'https://www.trattoriafirenze.it',
+                info: 'https://www.trattoriafirenze.it',
                 image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
             },
             {
                 id: 'partner-4',
                 name: 'Pizza Napoletana',
-                info: 'Midtown · Authentic Neapolitan Pizza',
+                url: 'https://www.pizzanapoletana.it',
+                info: 'https://www.pizzanapoletana.it',
                 image: 'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
             },
             {
                 id: 'partner-5',
                 name: 'Osteria Venezia',
-                info: 'Harbor District · Seafood & Wine',
+                url: 'https://www.osteriavenezia.it',
+                info: 'https://www.osteriavenezia.it',
                 image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
             },
             {
                 id: 'partner-6',
                 name: 'Gelateria Amore',
-                info: 'South Park · Artisan Gelato',
+                url: 'https://www.gelateriaamore.it',
+                info: 'https://www.gelateriaamore.it',
                 image: 'https://images.unsplash.com/photo-1550966871-3ed3cdb51f3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
             }
         ],
@@ -193,6 +199,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- State Management ---
     let pantryData = DEFAULT_PANTRY_DATA;
 
+    function normalizePartnersData(data) {
+        if (!data || !data.partners) return;
+        data.partners.forEach(p => {
+            if (!p.url) {
+                if (p.info && (p.info.startsWith('http://') || p.info.startsWith('https://') || p.info.startsWith('www.'))) {
+                    p.url = p.info;
+                } else {
+                    const slug = p.name ? p.name.toLowerCase().replace(/[^a-z0-9]/g, '') : 'partner';
+                    p.url = 'https://www.' + slug + '.com';
+                }
+            }
+        });
+    }
+
     function loadPantryData() {
         // Load from local cache first (fast, synchronous)
         var local = null;
@@ -202,6 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (e) { /* ignore */ }
 
         pantryData = local || DEFAULT_PANTRY_DATA;
+        normalizePartnersData(pantryData);
         renderDashboardUI(); // Render immediately from local data
 
         // Then try to sync from cloud in background, merge preserving local base64 images
@@ -209,6 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
             PANTRY_STORAGE.load(DEFAULT_PANTRY_DATA).then(function(cloudData) {
                 if (cloudData && typeof cloudData === 'object') {
                     pantryData = mergeWithLocal(cloudData, pantryData);
+                    normalizePartnersData(pantryData);
                     try {
                         localStorage.setItem('italianPantryData', JSON.stringify(pantryData));
                     } catch (e) { /* ignore */ }
@@ -621,11 +643,14 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        partnerTableBody.innerHTML = pantryData.partners.map((p, i) => `
+        partnerTableBody.innerHTML = pantryData.partners.map((p, i) => {
+            const partnerUrl = p.url || p.info || '';
+            const href = partnerUrl ? (partnerUrl.startsWith('http://') || partnerUrl.startsWith('https://') ? partnerUrl : 'https://' + partnerUrl) : '';
+            return `
             <tr>
                 <td><img class="table-thumb" src="${p.image || ''}" alt="${p.name}"></td>
                 <td><strong>${p.name}</strong></td>
-                <td>${p.info}</td>
+                <td>${partnerUrl ? `<a href="${href}" target="_blank" rel="noopener noreferrer" style="color: var(--accent-gold); word-break: break-all;">${partnerUrl} <i class="fas fa-external-link-alt" style="font-size: 0.75rem; margin-left: 4px;"></i></a>` : '<span style="color: var(--text-muted);">-</span>'}</td>
                 <td>
                     <div class="table-actions">
                         <button class="btn-icon btn-icon-edit" data-id="${p.id}" title="Edit"><i class="fas fa-edit"></i></button>
@@ -633,7 +658,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </td>
             </tr>
-        `).join('');
+        `;
+        }).join('');
 
         // Attach action events
         partnerTableBody.querySelectorAll('.btn-icon-edit').forEach(btn => {
@@ -665,9 +691,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (id) {
             const item = pantryData.partners.find(p => p.id === id);
             if (item) {
-                document.getElementById('partnerName').value = item.name;
-                document.getElementById('partnerInfo').value = item.info;
-                document.getElementById('partnerImgUrl').value = item.image;
+                document.getElementById('partnerName').value = item.name || '';
+                const urlField = document.getElementById('partnerUrl') || document.getElementById('partnerInfo');
+                if (urlField) urlField.value = item.url || item.info || '';
+                document.getElementById('partnerImgUrl').value = item.image || '';
                 updateImagePreview('previewPartnerImg', item.image);
             }
         } else {
@@ -691,10 +718,11 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const id = document.getElementById('partnerItemId').value;
             const name = document.getElementById('partnerName').value.trim();
-            const info = document.getElementById('partnerInfo').value.trim();
+            const urlField = document.getElementById('partnerUrl') || document.getElementById('partnerInfo');
+            const url = urlField ? urlField.value.trim() : '';
             const image = document.getElementById('partnerImgUrl').value.trim();
 
-            if (!name || !info || !image) {
+            if (!name || !url || !image) {
                 showToast('Please fill out all fields.', 'error');
                 return;
             }
@@ -703,13 +731,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update
                 const idx = pantryData.partners.findIndex(p => p.id === id);
                 if (idx !== -1) {
-                    pantryData.partners[idx] = { id, name, info, image };
+                    pantryData.partners[idx] = { id, name, url, info: url, image };
                     showToast('Dining partner updated.', 'success');
                 }
             } else {
                 // Create
                 const newId = 'partner-' + Date.now();
-                pantryData.partners.push({ id: newId, name, info, image });
+                pantryData.partners.push({ id: newId, name, url, info: url, image });
                 showToast('Dining partner added.', 'success');
             }
 

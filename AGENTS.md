@@ -14,6 +14,7 @@ A static marketing site for "The Italian Pantry," an authentic Italian foods bra
 ├── admin.js            # Admin CRUD logic (image compression, localStorage, cloud sync)
 ├── storage.js          # Cloud storage abstraction (JSONBin.io + localStorage fallback)
 ├── reviews-data.js     # Static review data (var reviewsData array)
+├── migrate-images.html # One-time tool: uploads base64 images to imgbb.com for cloud sync
 ├── admin.css           # Admin panel dark theme
 ├── images/             # Static image assets
 └── .vscode/            # Local VS Code config (empty)
@@ -116,6 +117,9 @@ This project has **no build system, no package.json, no tests, and no linter**.
 - If adding error handling, use `try/catch` with user-facing fallback
 - Data persistence: use `PANTRY_STORAGE` (storage.js) — reads from cloud first, falls back to localStorage
 - Image uploads: admin.js `compressImage()` reduces base64 size ~70% before storing
+- **Cloud images**: admin.js `setupImageUpload()` uploads images to imgbb.com (API key: `IMGBB_API_KEY` in admin.js) so URLs sync across devices; base64 images stay local
+- `migrate-images.html` — run in the admin's browser to convert existing base64 images to imgbb URLs
+- **Important**: `cleanForCloud()` in storage.js strips base64 `data:` URLs (>500 chars) before sending to JSONBin.io — text syncs, base64 stays local, merge fills empty image fields from local storage on load
 
 ## Recommended VS Code Extensions
 

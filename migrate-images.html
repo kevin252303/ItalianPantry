@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Migration Tool - The Italian Pantry</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; background: #f5f5f5; }
+        .card { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h1 { margin-top: 0; }
+        input[type=text] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 12px; box-sizing: border-box; }
+        button { padding: 10px 20px; background: #28a745; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 15px; }
+        button:disabled { background: #aaa; cursor: not-allowed; }
+        .log { background: #1e1e1e; color: #0f0; padding: 12px; border-radius: 4px; font-family: monospace; font-size: 13px; max-height: 300px; overflow-y: auto; margin-top: 16px; white-space: pre-wrap; }
+        .note { background: #fff3cd; border: 1px solid #ffeeba; padding: 12px; border-radius: 4px; margin-bottom: 16px; font-size: 14px; }
+        .error { color: #f66; }
+        .ok { color: #6f6; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Image Migration Tool</h1>
+        <div class="note">
+            <strong>How it works:</strong> This reads all base64 images from your admin panel data (stored in this browser),
+            uploads them to imgbb.com, and replaces them with permanent URLs — so they'll sync to all devices.
+            You must run this in the <strong>same browser</strong> where you use the admin panel.
+        </div>
+
+        <label for="apiKey"><strong>imgbb API Key</strong> (get free at api.imgbb.com):</label>
+        <input type="text" id="apiKey" placeholder="Paste your imgbb API key here">
+
+        <button id="btnMigrate">Start Migration</button>
+        <button id="btnBack" style="background:#6c757d;">Back to Admin</button>
+
+        <div id="log" class="log" style="display:none;"></div>
+    </div>
+
+    <script src="storage.js"></script>
+    <script>
+        var btnMigrate = document.getElementById('btnMigrate');
+        var btnBack = document.getElementById('btnBack');
+        var apiKeyInput = document.getElementById('apiKey');
+        var logBox = document.getElementById('log');
+        var logLines = [];
+
+        function log(msg, cls) {
+            logLines.push((cls ? '<span class="' + cls + '">' : '') + msg + (cls ? '</span>' : ''));
+            logBox.innerHTML = logLines.join('\n');
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        btnBack.addEventListener('click', function() {
+            window.location.href = 'admin.html';
+        });
+
+        btnMigrate.addEventListener('click', function() {
+            var apiKey = apiKeyInput.value.trim();
+            if (!apiKey) {
+                alert('Please paste your imgbb API key first.');
+                return;
+            }
+
+            // Read localStorage data
+            var data = null;
+            try {
+                data = JSON.parse(localStorage.getItem('italianPantryData'));
+            } catch (e) { /* ignore */ }
+            if (!data) {
+                alert('No admin data found in this browser. Open the admin panel once, then run this again.');
+                return;
+            }
+
+            logBox.style.display = 'block';
+            logLines = [];
+            logBox.innerHTML = '';
+            btnMigrate.disabled = true;
+
+            // Find all base64 images in the data structure
+            var items = [];
+            function collect(obj, path) {
+                if (!obj || typeof obj !== 'object') return;
+                if (typeof obj === 'string') {
+                    if (obj.indexOf('data:image/') === 0) {
+                        items.push({ path: path, base64: obj });
+                    }
+                    return;
+                }
+                for (var key in obj) {
+                    if (typeof obj[key] === 'string' && obj[key].indexOf('data:image/') === 0) {
+                        items.push({ path: path + '.' + key, base64: obj[key] });
+                    } else if (obj[key] && typeof obj[key] === 'object') {
+                        collect(obj[key], path + '.' + key);
+                    }
+                }
+            }
+            collect(data, 'data');
+
+            if (items.length === 0) {
+                log('No base64 images found. Nothing to migrate.', 'ok');
+                btnMigrate.disabled = false;
+                return;
+            }
+
+            log('Found ' + items.length + ' base64 image(s) to migrate.\n');
+            var completed = 0;
+            var failed = 0;
+
+            function uploadNext(index) {
+                if (index >= items.length) {
+                    // Done — save updated data to localStorage
+                    localStorage.setItem('italianPantryData', JSON.stringify(data));
+                    log('\n=== MIGRATION COMPLETE ===', 'ok');
+                    log(completed + ' image(s) migrated, ' + failed + ' failed.');
+
+                    // Push to JSONBin.io cloud so other devices see the URLs
+                    log('Pushing updated data to cloud...');
+                    if (typeof PANTRY_STORAGE !== 'undefined') {
+                        PANTRY_STORAGE.save(data).then(function() {
+                            log('Cloud updated successfully! All devices will now see the images.', 'ok');
+                            log('You can now open the admin panel.');
+                        }).catch(function(e) {
+                            log('Cloud push failed: ' + (e.message || e) + '. Open admin panel and click Save.', 'error');
+                        });
+                    } else {
+                        log('Storage module not loaded. Open admin panel and click Save to push to cloud.', 'error');
+                    }
+                    btnMigrate.disabled = false;
+                    return;
+                }
+
+                var item = items[index];
+                var rawBase64 = item.base64.split(',')[1] || item.base64;
+                log('Uploading (' + (index + 1) + '/' + items.length + ') ' + item.path + '...');
+
+                var fd = new FormData();
+                fd.append('image', rawBase64);
+                fd.append('name', 'pantry-image-' + (index + 1));
+
+                fetch('https://api.imgbb.com/1/upload?key=' + encodeURIComponent(apiKey), {
+                    method: 'POST',
+                    body: fd
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(json) {
+                    if (json.data && json.data.url) {
+                        // Set the URL back into the data structure
+                        var parts = item.path.split('.');
+                        var target = data;
+                        for (var i = 1; i < parts.length - 1; i++) {
+                            target = target[parts[i]];
+                        }
+                        target[parts[parts.length - 1]] = json.data.url;
+                        log('  -> OK: ' + json.data.url, 'ok');
+                        completed++;
+                    } else {
+                        throw new Error(json.error ? json.error.message : 'Unknown error');
+                    }
+                    uploadNext(index + 1);
+                })
+                .catch(function(err) {
+                    log('  -> FAILED: ' + (err.message || err), 'error');
+                    failed++;
+                    uploadNext(index + 1);
+                });
+            }
+
+            uploadNext(0);
+        });
+    </script>
+</body>
+</html>
