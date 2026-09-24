@@ -699,31 +699,38 @@ body {
     }
 
     .logo-section {
-        min-height: 100vh;
-        min-height: 100dvh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        padding: 20px;
-        box-sizing: border-box;
+        min-height: 100vh !important;
+        min-height: -webkit-fill-available !important;
+        min-height: 100dvh !important;
+        height: 100vh !important;
+        height: -webkit-fill-available !important;
+        height: 100dvh !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        padding: 20px !important;
+        box-sizing: border-box !important;
+        background-color: #ffffff !important;
     }
 
     #logoLink {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        max-width: 320px;
-        cursor: pointer;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        max-width: 320px !important;
+        cursor: pointer !important;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
     }
 
     .logo-bar {
-        width: 65vw;
-        max-width: 280px;
-        height: auto;
-        margin: 0 auto;
-        display: block;
+        width: 65vw !important;
+        max-width: 280px !important;
+        height: auto !important;
+        margin: 0 auto !important;
+        display: block !important;
         transition: transform 0.2s ease, opacity 0.3s ease;
     }
 
@@ -798,16 +805,20 @@ body {
     }
 
     .logo-section {
-        min-height: 100vh;
-        min-height: 100dvh;
-        padding: 15px;
+        min-height: 100vh !important;
+        min-height: -webkit-fill-available !important;
+        min-height: 100dvh !important;
+        height: 100vh !important;
+        height: -webkit-fill-available !important;
+        height: 100dvh !important;
+        padding: 15px !important;
     }
 
     .logo-bar {
-        width: 70vw;
-        max-width: 260px;
-        height: auto;
-        margin: 0 auto;
+        width: 70vw !important;
+        max-width: 260px !important;
+        height: auto !important;
+        margin: 0 auto !important;
     }
 }
 
@@ -836,25 +847,27 @@ html {
     animation: fadeInUp 0.8s ease-out;
 }
 
-.logo-section {
-    position: relative;
-    width: 100%;
-}
+@media (min-width: 769px) {
+    .logo-section {
+        position: relative;
+        width: 100%;
+    }
 
-#logoLink {
-    display: block;
-    text-decoration: none;
-    cursor: pointer;
-}
+    #logoLink {
+        display: block;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
-.logo-bar {
-    opacity: 1;
-    height: 50%;
-    width: 33%;
-    margin-left: 35%;
-    margin-top: 9%;
-    margin-bottom: 6%;
-    cursor: pointer;
+    .logo-bar {
+        opacity: 1;
+        height: 50%;
+        width: 33%;
+        margin-left: 35%;
+        margin-top: 9%;
+        margin-bottom: 6%;
+        cursor: pointer;
+    }
 }
 
 /* --- Board Container Effect --- */

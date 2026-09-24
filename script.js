@@ -401,23 +401,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Logo click and scroll show/hide header logic
     const headerEl = document.getElementById('dvHeader');
     const logoEl = document.querySelector('#logoLink');
+    const logoSection = document.querySelector('#logoSection');
     let ignoreScroll = false;
 
-    if (logoEl && headerEl) {
-        // Show header and scroll to home on logo click
-        logoEl.addEventListener('click', function(e) {
-            e.preventDefault();
+    function handleLogoClick(e) {
+        if (e) e.preventDefault();
 
-            // Unlock mobile scroll if locked
-            document.documentElement.classList.remove('mobile-logo-first');
-            document.body.classList.remove('mobile-logo-first');
+        // Unlock mobile scroll if locked
+        document.documentElement.classList.remove('mobile-logo-first');
+        document.body.classList.remove('mobile-logo-first');
 
-            headerEl.style.display = 'block';
-            ignoreScroll = true;
+        headerEl.style.display = 'block';
+        ignoreScroll = true;
 
+        // Allow mobile browser to process the layout unlock before scrolling
+        setTimeout(() => {
             const target = document.querySelector('#home');
             if (target) {
-                const headerHeight = headerEl.offsetHeight;
+                const headerHeight = headerEl.offsetHeight || 0;
                 const targetPosition = target.offsetTop - headerHeight;
                 window.scrollTo({
                     top: targetPosition,
@@ -428,7 +429,21 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 ignoreScroll = false;
             }, 1000);
-        });
+        }, 60);
+    }
+
+    if (logoEl && headerEl) {
+        // Show header and scroll to home on logo click
+        logoEl.addEventListener('click', handleLogoClick);
+
+        // Also allow tapping anywhere on logo section while locked on mobile
+        if (logoSection) {
+            logoSection.addEventListener('click', function(e) {
+                if (document.documentElement.classList.contains('mobile-logo-first') || document.body.classList.contains('mobile-logo-first')) {
+                    handleLogoClick(e);
+                }
+            });
+        }
 
         // Hide header when scrolled near the logo
         let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
