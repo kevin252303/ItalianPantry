@@ -315,11 +315,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
+            if (this.id === 'logoLink') return;
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
                 const headerEl = document.querySelector('.header');
-                const headerHeight = headerEl ? headerEl.offsetHeight : 0;
+                const headerHeight = headerEl && headerEl.style.display !== 'none' ? headerEl.offsetHeight : 0;
                 const targetPosition = target.offsetTop - headerHeight;
                 window.scrollTo({
                     top: targetPosition,
@@ -382,16 +383,47 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Mobile: logo page loads first
+    if (window.innerWidth <= 768) {
+        if (!window.location.hash || window.location.hash === '#home' || window.location.hash === '#') {
+            document.documentElement.classList.add('mobile-logo-first');
+            document.body.classList.add('mobile-logo-first');
+        }
+    }
+
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            document.documentElement.classList.remove('mobile-logo-first');
+            document.body.classList.remove('mobile-logo-first');
+        }
+    });
+
     // Logo click and scroll show/hide header logic
-    const headerEl = document.getElementById("dvHeader");
-    const logoEl = document.getElementById("logoLink");
+    const headerEl = document.getElementById('dvHeader');
+    const logoEl = document.querySelector('#logoLink');
     let ignoreScroll = false;
 
     if (logoEl && headerEl) {
-        // Show header on logo click
-        logoEl.addEventListener("click", function () {
-            headerEl.style.display = "block";
+        // Show header and scroll to home on logo click
+        logoEl.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // Unlock mobile scroll if locked
+            document.documentElement.classList.remove('mobile-logo-first');
+            document.body.classList.remove('mobile-logo-first');
+
+            headerEl.style.display = 'block';
             ignoreScroll = true;
+
+            const target = document.querySelector('#home');
+            if (target) {
+                const headerHeight = headerEl.offsetHeight;
+                const targetPosition = target.offsetTop - headerHeight;
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
 
             setTimeout(() => {
                 ignoreScroll = false;
@@ -400,15 +432,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Hide header when scrolled near the logo
         let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        window.addEventListener("scroll", function () {
+        window.addEventListener('scroll', function() {
             if (ignoreScroll) return;
 
             let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
-            if (currentScroll < lastScrollTop){
+            if (currentScroll < lastScrollTop) {
                 const logoPosition = logoEl.getBoundingClientRect().top;
                 if (logoPosition >= 0 && logoPosition < window.innerHeight / 2) {
-                    headerEl.style.display = "none";
+                    headerEl.style.display = 'none';
                 }
             }
             lastScrollTop = currentScroll;

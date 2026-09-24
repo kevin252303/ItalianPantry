@@ -690,11 +690,45 @@ body {
         margin-top: 30px;
     }
 
+    html.mobile-logo-first,
+    body.mobile-logo-first {
+        overflow: hidden;
+        height: 100vh;
+        height: 100dvh;
+        overscroll-behavior: none;
+    }
+
+    .logo-section {
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    #logoLink {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 320px;
+        cursor: pointer;
+    }
+
     .logo-bar {
-        width: 60%;
-        margin-left: 20%;
-        margin-top: 5%;
-        margin-bottom: 4%;
+        width: 65vw;
+        max-width: 280px;
+        height: auto;
+        margin: 0 auto;
+        display: block;
+        transition: transform 0.2s ease, opacity 0.3s ease;
+    }
+
+    #logoLink:active .logo-bar {
+        transform: scale(0.96);
     }
 
     .hero-slideshow {
@@ -763,11 +797,17 @@ body {
         padding: 0 15px;
     }
 
+    .logo-section {
+        min-height: 100vh;
+        min-height: 100dvh;
+        padding: 15px;
+    }
+
     .logo-bar {
-        width: 70%;
-        margin-left: 15%;
-        margin-top: 4%;
-        margin-bottom: 3%;
+        width: 70vw;
+        max-width: 260px;
+        height: auto;
+        margin: 0 auto;
     }
 }
 
@@ -796,13 +836,25 @@ html {
     animation: fadeInUp 0.8s ease-out;
 }
 
-.logo-bar{
+.logo-section {
+    position: relative;
+    width: 100%;
+}
+
+#logoLink {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.logo-bar {
     opacity: 1;
     height: 50%;
     width: 33%;
     margin-left: 35%;
     margin-top: 9%;
     margin-bottom: 6%;
+    cursor: pointer;
 }
 
 /* --- Board Container Effect --- */
