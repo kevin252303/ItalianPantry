@@ -572,6 +572,14 @@ body {
     padding-top: 20px;
     text-align: center;
     color: #999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.footer-bottom p {
+    margin: 0;
 }
 
 /* Responsive Design */
