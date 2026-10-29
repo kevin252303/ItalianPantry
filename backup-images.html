@@ -650,8 +650,9 @@
             btn.disabled = true;
             log('Starting migration to server (upload.php)...');
 
-            var successCount = 0;
-            var failCount = 0;
+            try {
+                var successCount = 0;
+                var failCount = 0;
 
             for (var i = 0; i < imageEntries.length; i++) {
                 var entry = imageEntries[i];
@@ -718,7 +719,8 @@
                     log('Cloud save error: ' + err.message + ' (Saved locally in browser cache)');
                     alert('Images migrated, but cloud sync had an error. Data saved locally in this browser.');
                 }
-            } finally {
+            }
+        } finally {
                 btn.disabled = false;
                 setProgress(100);
             }
