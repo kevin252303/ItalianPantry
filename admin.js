@@ -431,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Helper to wire up image uploads — uploads to imgbb.com for cross-device sync
+    // Helper to wire up image uploads — uploads directly to server (upload.php) in images/uploads/
     function setupImageUpload(fileInputId, textInputId, previewId) {
         var fileInput = document.getElementById(fileInputId);
         var textInput = document.getElementById(textInputId);
@@ -442,45 +442,43 @@ document.addEventListener('DOMContentLoaded', function() {
             var file = this.files[0];
             if (!file) return;
 
-            // Compress first, then upload to imgbb
-            compressImage(file).then(function(base64Data) {
-                // Strip the data:image/...;base64, prefix — imgbb wants raw base64
-                var rawBase64 = base64Data.split(',')[1] || base64Data;
+            var uploadLabel = document.querySelector('label[for="' + fileInputId + '"]');
+            var origText = uploadLabel ? uploadLabel.innerHTML : '';
+            if (uploadLabel) uploadLabel.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
 
-                // Upload to imgbb
-                var uploadLabel = document.querySelector('label[for="' + fileInputId + '"]');
-                var origText = uploadLabel ? uploadLabel.innerHTML : '';
-                if (uploadLabel) uploadLabel.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            // Send to upload.php
+            var fd = new FormData();
+            fd.append('image', file);
+            fd.append('name', file.name.replace(/\.[^.]+$/, ''));
 
-                fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_API_KEY, {
-                    method: 'POST',
-                    body: (function() {
-                        var fd = new FormData();
-                        fd.append('image', rawBase64);
-                        fd.append('name', file.name.replace(/\.[^.]+$/, ''));
-                        return fd;
-                    })()
-                })
-                .then(function(res) { return res.json(); })
-                .then(function(json) {
-                    if (json.data && json.data.url) {
-                        textInput.value = json.data.url;
-                        updateImagePreview(previewId, json.data.url);
-                        showToast('Image uploaded successfully!', 'success');
-                    } else {
-                        throw new Error(json.error ? json.error.message : 'Upload failed');
-                    }
-                })
-                .catch(function(err) {
-                    console.warn('[IMGBB] Upload failed, saving locally:', err);
-                    // Fallback: save as base64 locally
+            fetch('upload.php', {
+                method: 'POST',
+                body: fd
+            })
+            .then(function(res) {
+                if (!res.ok) throw new Error('Upload failed (HTTP ' + res.status + ')');
+                return res.json();
+            })
+            .then(function(json) {
+                if (json.success && json.url) {
+                    textInput.value = json.url;
+                    updateImagePreview(previewId, json.url);
+                    showToast('Image uploaded and saved to server!', 'success');
+                } else {
+                    throw new Error(json.error || 'Server upload failed');
+                }
+            })
+            .catch(function(err) {
+                console.warn('[UPLOAD] Server upload failed, falling back to local base64:', err);
+                // Fallback: compress as base64 locally if server endpoint unavailable (e.g. offline preview)
+                compressImage(file).then(function(base64Data) {
                     textInput.value = base64Data;
                     updateImagePreview(previewId, base64Data);
-                    showToast('Upload failed — image saved locally (won\'t sync).', 'error');
-                })
-                .finally(function() {
-                    if (uploadLabel) uploadLabel.innerHTML = origText;
+                    showToast('Image saved locally (offline mode).', 'warning');
                 });
+            })
+            .finally(function() {
+                if (uploadLabel) uploadLabel.innerHTML = origText;
             });
         });
 
